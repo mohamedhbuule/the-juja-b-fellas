@@ -688,35 +688,73 @@
 }
 
 @media (max-width: 768px) {
+  .booking-section {
+    padding: 60px 10px 40px;
+  }
+
   .page-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+
+  .page-subtitle {
+    font-size: 0.95rem;
+    padding: 0 10px;
   }
 
   .steps-indicator {
-    gap: 5px;
+    gap: 4px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    padding: 0 10px;
   }
 
   .step-number {
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .step-label {
+    font-size: 11px;
   }
 
   .step-line {
-    width: 30px;
+    width: 20px;
+    height: 2px;
   }
 
   .booking-form {
-    padding: 30px 20px;
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+
+  .form-step h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-step > p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
   }
 
   .date-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .date-card {
+    padding: 16px;
+  }
+
+  .date-day {
+    font-size: 2rem;
   }
 
   .time-selection-container {
     flex-direction: column;
     align-items: stretch;
+    gap: 16px;
   }
 
   .time-select-group {
@@ -726,21 +764,109 @@
 
   .time-arrow {
     transform: rotate(90deg);
-    margin: 10px 0;
+    margin: 0;
+    font-size: 1.5rem;
+    align-self: center;
+  }
+
+  .duration-display {
+    padding: 16px;
+    font-size: 1rem;
   }
 
   .subject-grid,
   .venue-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .subject-card,
+  .venue-card {
+    padding: 24px;
   }
 
   .step-actions {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .step-actions .btn-primary,
+  .step-actions .btn-secondary {
+    width: 100%;
+  }
+
+  .my-bookings-section {
+    padding: 24px 16px;
+    margin-top: 30px;
+  }
+
+  .my-bookings-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
   }
 
   .booking-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+    padding: 16px;
+  }
+
+  .booking-date {
+    font-size: 1rem;
+  }
+
+  .booking-info {
+    font-size: 0.9rem;
+  }
+
+  .delete-booking {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .booking-section {
+    padding: 50px 8px 30px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .steps-indicator {
+    gap: 2px;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+  }
+
+  .step-label {
+    font-size: 10px;
+  }
+
+  .step-line {
+    width: 15px;
+  }
+
+  .booking-form {
+    padding: 20px 12px;
+  }
+
+  .date-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .time-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .subject-icon,
+  .venue-icon {
+    font-size: 36px;
   }
 }

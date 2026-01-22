@@ -77,6 +77,48 @@
   font-size: 14px;
 }
 
+/* Real-time validation styles */
+.input-group input.valid {
+  border-color: var(--success);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.input-group input.invalid {
+  border-color: var(--error);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.field-validation-message {
+  margin-top: 6px;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  animation: slideDown 0.3s ease;
+}
+
+.field-validation-message.error {
+  color: var(--error);
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid var(--error);
+}
+
+.field-validation-message.success {
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid var(--success);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .register-card {
     padding: 32px 24px;
@@ -84,5 +126,23 @@
 
   .register-header h1 {
     font-size: 28px;
+  }
+
+  .input-group input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    padding: 24px 16px;
+  }
+
+  .register-header h1 {
+    font-size: 24px;
+  }
+
+  .field-validation-message {
+    font-size: 11px;
   }
 }

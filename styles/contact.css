@@ -98,11 +98,72 @@
 }
 
 @media (max-width: 968px) {
+  .contact-hero {
+    padding: 80px 15px 40px;
+  }
+
+  .contact-content {
+    padding: 50px 15px;
+  }
+
   .contact-grid {
     grid-template-columns: 1fr;
+    gap: 30px;
   }
 
   .contact-form-wrapper {
     position: static;
+  }
+
+  .info-card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero {
+    padding: 70px 15px 30px;
+  }
+
+  .contact-content {
+    padding: 40px 15px;
+  }
+
+  .contact-info {
+    gap: 16px;
+  }
+
+  .form-card {
+    padding: 24px;
+  }
+
+  .form-card h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-hero {
+    padding: 60px 10px 20px;
+  }
+
+  .contact-content {
+    padding: 30px 10px;
+  }
+
+  .info-card {
+    padding: 20px;
+  }
+
+  .info-icon {
+    font-size: 40px;
+  }
+
+  .form-card {
+    padding: 20px;
+  }
+
+  .form-card h2 {
+    font-size: 1.3rem;
   }
 }

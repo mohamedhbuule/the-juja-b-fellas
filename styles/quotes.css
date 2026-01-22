@@ -78,11 +78,52 @@
 }
 
 @media (max-width: 768px) {
+  .quotes-hero {
+    padding: 80px 15px 40px;
+  }
+
+  .quotes-content {
+    padding: 50px 15px;
+  }
+
+  .quotes-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .quote-card.featured {
     grid-column: span 1;
   }
 
+  .quote-card {
+    padding: 24px;
+  }
+
   .quote-card blockquote {
     font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .quote-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quotes-hero {
+    padding: 60px 10px 30px;
+  }
+
+  .quotes-content {
+    padding: 30px 10px;
+  }
+
+  .quote-card {
+    padding: 20px;
+  }
+
+  .quote-card blockquote {
+    font-size: 1rem;
   }
 }

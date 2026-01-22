@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Profile - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/profile.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Side Navigation -->
+    <nav id="sideNav" class="side-nav">
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="logo-icon">🕌</span>
+          <span class="logo-text">Juja B Fellas</span>
+        </div>
+        <button class="nav-close" id="navClose">×</button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="home.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="about.html" class="nav-link">📖 About</a></li>
+        <li><a href="sessions.html" class="nav-link">📅 Book Session</a></li>
+        <li><a href="subjects.html" class="nav-link">📚 Subjects</a></li>
+        <li><a href="quotes.html" class="nav-link">💬 Motivation</a></li>
+        <li><a href="contact.html" class="nav-link">📧 Contact</a></li>
+        <li>
+          <a href="profile.html" class="nav-link active">👤 Profile</a>
+        </li>
+        <li>
+          <button class="nav-link logout-btn" id="logoutBtn">🚪 Logout</button>
+        </li>
+      </ul>
+      <div class="nav-footer">
+        <p class="user-info" id="userInfo"></p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <button class="nav-toggle" id="navToggle">☰</button>
+
+      <section class="profile-hero">
+        <div class="container">
+          <h1 class="page-title">My Profile</h1>
+          <p class="page-subtitle">Manage your account and view your information</p>
+        </div>
+      </section>
+
+      <section class="profile-content">
+        <div class="container">
+          <div class="profile-grid">
+            <!-- Profile Card -->
+            <div class="profile-card">
+              <div class="profile-header">
+                <div class="profile-avatar">
+                  <span class="avatar-icon">👤</span>
+                </div>
+                <div class="profile-info">
+                  <h2 id="profileUsername">Loading...</h2>
+                  <p id="profileEmail">Loading...</p>
+                  <span class="member-since" id="memberSince">Member since: Loading...</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Statistics Card -->
+            <div class="stats-card">
+              <h3>📊 Your Statistics</h3>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-value" id="totalBookings">0</div>
+                  <div class="stat-label">Total Bookings</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value" id="upcomingSessions">0</div>
+                  <div class="stat-label">Upcoming Sessions</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value" id="completedSessions">0</div>
+                  <div class="stat-label">Completed Sessions</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="settings-card">
+              <h3>⚙️ Account Settings</h3>
+              <form id="profileForm" class="profile-form">
+                <div class="form-group">
+                  <label for="editUsername">Username</label>
+                  <input
+                    type="text"
+                    id="editUsername"
+                    placeholder="Enter username"
+                    required
+                    minlength="3"
+                    maxlength="20"
+                  />
+                  <span class="input-hint">3-20 characters, letters, numbers, and underscores only</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="editEmail">Email Address</label>
+                  <input
+                    type="email"
+                    id="editEmail"
+                    placeholder="Enter email"
+                    required
+                  />
+                  <span class="input-hint">We'll use this to send booking confirmations</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="currentPassword">Current Password</label>
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    placeholder="Enter current password"
+                  />
+                  <span class="input-hint">Required only if changing password</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    placeholder="Enter new password"
+                    minlength="6"
+                  />
+                  <span class="input-hint">Leave blank to keep current password</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmNewPassword">Confirm New Password</label>
+                  <input
+                    type="password"
+                    id="confirmNewPassword"
+                    placeholder="Confirm new password"
+                  />
+                </div>
+
+                <div id="profileError" class="error-message hidden"></div>
+                <div id="profileSuccess" class="success-message hidden"></div>
+
+                <button type="submit" class="btn-primary">
+                  <span>Save Changes</span>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M7.5 15L12.5 10L7.5 5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+            <!-- My Bookings Preview -->
+            <div class="bookings-preview-card">
+              <div class="card-header">
+                <h3>📅 My Recent Bookings</h3>
+                <a href="sessions.html" class="view-all-link">View All →</a>
+              </div>
+              <div id="recentBookings" class="recent-bookings-list">
+                <p class="no-bookings">No bookings yet. <a href="sessions.html">Book your first session!</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+  </body>
+</html>
