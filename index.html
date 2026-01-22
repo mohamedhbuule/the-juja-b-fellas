@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content login-form">
+        <div class="login-header">
+          <h2>🕌 Welcome to The Juja B Fellas</h2>
+          <p>Please log in to continue</p>
+        </div>
+        <form id="loginForm">
+          <div class="input-group">
+            <input type="email" id="userEmail" placeholder=" " required />
+            <label for="userEmail">Email Address</label>
+            <span class="input-icon">📧</span>
+          </div>
+          <button type="submit" class="btn-primary">
+            <span>Continue</span>
+            <svg
+              class="arrow"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M7.5 15L12.5 10L7.5 5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="hidden">
+      <h1>🕌 THE JUJA B FELLAS</h1>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#sessions">Book Session</a></li>
+        <li><a href="#subjects">Subjects</a></li>
+        <li><a href="#venues">Venues</a></li>
+        <li><a href="#quotes">Motivation</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><span id="userEmailDisplay"></span></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero hidden">
+      <h2>Revising Together. Succeeding Together.</h2>
+      <p>
+        Organized Islamic revision meetups for academic & spiritual excellence
+      </p>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about" class="hidden">
+      <h2>About Us</h2>
+      <p>
+        THE JUJA B FELLAS is a student-led revision organization focused on
+        preparing for exams through structured Islamic study sessions held in
+        mosques within Juja.
+      </p>
+    </section>
+
+    <!-- SESSION BOOKING -->
+    <section id="sessions" class="hidden">
+      <h2>Book Your Revision Session</h2>
+      <p class="section-subtitle">
+        Choose your preferred date, time, and subject
+      </p>
+
+      <form id="bookingForm" class="booking-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sessionDate">📅 Select Date</label>
+            <select id="sessionDate" required>
+              <option value="">Choose a date...</option>
+              <option value="2026-02-02">2nd February 2026</option>
+              <option value="2026-02-03">3rd February 2026</option>
+              <option value="2026-02-04">4th February 2026</option>
+              <option value="2026-02-05">5th February 2026</option>
+              <option value="2026-02-06">6th February 2026</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="sessionTime">🕐 Select Time</label>
+            <select id="sessionTime" required>
+              <option value="">Choose a time...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sessionSubject">📚 Select Subject</label>
+          <select id="sessionSubject" required>
+            <option value="">Choose a subject...</option>
+            <option value="Science of Hadith">📘 Science of Hadith</option>
+            <option value="Jurisprudence">⚖️ Jurisprudence</option>
+            <option value="Principles of Islamic Jurisprudence">
+              📜 Principles of Islamic Jurisprudence
+            </option>
+            <option value="Islamic Creed">🧠 Islamic Creed</option>
+            <option value="Hadith">📖 Hadith</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <span>Book Session</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M7.5 15L12.5 10L7.5 5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </form>
+
+      <div id="bookingSuccess" class="success-message hidden">
+        <div class="success-content">
+          <span class="success-icon">✓</span>
+          <h3>Session Booked Successfully!</h3>
+          <p>Your booking details have been sent to your email.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUBJECTS -->
+    <section id="subjects" class="hidden">
+      <h2>Subjects of Revision</h2>
+      <ul class="list">
+        <li>📘 Science of Hadith</li>
+        <li>⚖️ Jurisprudence</li>
+        <li>📜 Principles of Islamic Jurisprudence</li>
+        <li>🧠 Islamic Creed</li>
+        <li>📖 Hadith</li>
+      </ul>
+    </section>
+
+    <!-- VENUES -->
+    <section id="venues" class="hidden">
+      <h2>Revision Venues</h2>
+      <ul class="list">
+        <li>🕌 Al Basiirah Mosque</li>
+        <li>🕌 Al Hijaaz Mosque</li>
+        <li>🕌 Masjid Abii Bakar</li>
+        <li>🕌 Al Hidaayah Mosque</li>
+      </ul>
+    </section>
+
+    <!-- QUOTES -->
+    <section id="quotes" class="hidden">
+      <h2>Motivational Quotes</h2>
+
+      <blockquote>
+        "Whoever travels a path in search of knowledge, Allah makes easy for him
+        a path to Jannah." — Prophet Muhammad ﷺ
+      </blockquote>
+
+      <blockquote>
+        "Discipline is choosing between what you want now and what you want
+        most."
+      </blockquote>
+
+      <blockquote>
+        "Knowledge is power, but applied knowledge is success."
+      </blockquote>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="hidden">
+      <h2>Contact Us</h2>
+      <p>📧 Email: <strong>mohamedhbuule2026@gmail.com</strong></p>
+      <p>📞 Phone: <strong>+254 745 541 134</strong></p>
+    </section>
+
+    <footer class="hidden">
+      <p>© 2026 THE JUJA B FELLAS | Built for Students</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
