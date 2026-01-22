@@ -1,7 +1,9 @@
 // Sessions Booking Script
 document.addEventListener('DOMContentLoaded', () => {
   const bookingForm = document.getElementById('bookingForm');
-  const timeGrid = document.getElementById('timeGrid');
+  const startTimeSelect = document.getElementById('startTime');
+  const endTimeSelect = document.getElementById('endTime');
+  const durationDisplay = document.getElementById('durationDisplay');
   const myBookings = document.getElementById('myBookings');
   const successModal = document.getElementById('successModal');
   const closeSuccessModal = document.getElementById('closeSuccessModal');
@@ -11,6 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize time slots
   initializeTimeSlots();
+  
+  // Handle start time change
+  if (startTimeSelect) {
+    startTimeSelect.addEventListener('change', () => {
+      updateEndTimeOptions();
+      updateDuration();
+    });
+  }
+  
+  // Handle end time change
+  if (endTimeSelect) {
+    endTimeSelect.addEventListener('change', () => {
+      updateDuration();
+    });
+  }
 
   // Display existing bookings
   displayBookings();
@@ -44,13 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Get form data
       const formData = new FormData(bookingForm);
+      const startTime = formData.get('startTime');
+      const endTime = formData.get('endTime');
+      const duration = calculateDuration(startTime, endTime);
+      
       const booking = {
         id: Date.now().toString(),
         userId: auth.getCurrentUser()?.id,
         username: auth.getCurrentUser()?.username,
         email: auth.getCurrentUser()?.email,
         date: formData.get('sessionDate'),
-        time: formData.get('sessionTime'),
+        startTime: startTime,
+        endTime: endTime,
+        duration: duration,
         subject: formData.get('sessionSubject'),
         venue: formData.get('sessionVenue'),
         timestamp: new Date().toISOString()
@@ -125,6 +148,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const requiredInputs = stepEl.querySelectorAll('input[required], select[required]');
     let isValid = true;
 
+    // Special validation for time step
+    if (step === 2) {
+      const startTime = startTimeSelect?.value;
+      const endTime = endTimeSelect?.value;
+      
+      if (!startTime || !endTime) {
+        isValid = false;
+        alert('Please select both start and end times');
+        return false;
+      }
+      
+      // Validate end time is after start time
+      const startHour = parseInt(startTime.split(':')[0]);
+      const endHour = parseInt(endTime.split(':')[0]);
+      
+      if (endHour <= startHour) {
+        isValid = false;
+        alert('End time must be after start time');
+        if (endTimeSelect) {
+          endTimeSelect.style.borderColor = 'var(--error)';
+          setTimeout(() => {
+            if (endTimeSelect) endTimeSelect.style.borderColor = '';
+          }, 2000);
+        }
+        return false;
+      }
+    }
+
     requiredInputs.forEach(input => {
       if (input.type === 'radio') {
         const radioGroup = stepEl.querySelectorAll(`input[name="${input.name}"]`);
@@ -136,10 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (!input.value) {
         isValid = false;
         input.style.borderColor = 'var(--error)';
+        setTimeout(() => {
+          input.style.borderColor = '';
+        }, 2000);
       }
     });
 
-    if (!isValid) {
+    if (!isValid && step !== 2) {
       alert('Please complete all required fields');
     }
 
@@ -147,11 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initializeTimeSlots() {
-    if (!timeGrid) return;
+    if (!startTimeSelect || !endTimeSelect) return;
 
-    timeGrid.innerHTML = '';
-
-    // Generate time slots from 7am to 10pm
+    // Generate time options from 7am to 10pm
+    const times = [];
     for (let hour = 7; hour <= 22; hour++) {
       const time24 = `${hour.toString().padStart(2, '0')}:00`;
       const time12 = hour > 12 
@@ -159,24 +212,102 @@ document.addEventListener('DOMContentLoaded', () => {
         : hour === 12 
         ? '12:00 PM' 
         : `${hour}:00 AM`;
-
-      const label = document.createElement('label');
-      label.className = 'time-option';
-
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = 'sessionTime';
-      input.value = time24;
-      input.required = true;
-
-      const card = document.createElement('div');
-      card.className = 'time-card';
-      card.textContent = time12;
-
-      label.appendChild(input);
-      label.appendChild(card);
-      timeGrid.appendChild(label);
+      times.push({ value: time24, display: time12 });
     }
+
+    // Populate start time dropdown
+    startTimeSelect.innerHTML = '<option value="">Select start time...</option>';
+    times.forEach(time => {
+      const option = document.createElement('option');
+      option.value = time.value;
+      option.textContent = time.display;
+      startTimeSelect.appendChild(option);
+    });
+
+    // Populate end time dropdown (will be updated based on start time)
+    endTimeSelect.innerHTML = '<option value="">Select end time...</option>';
+  }
+
+  function updateEndTimeOptions() {
+    if (!startTimeSelect || !endTimeSelect) return;
+
+    const startTime = startTimeSelect.value;
+    if (!startTime) {
+      endTimeSelect.innerHTML = '<option value="">Select end time...</option>';
+      return;
+    }
+
+    const startHour = parseInt(startTime.split(':')[0]);
+    endTimeSelect.innerHTML = '<option value="">Select end time...</option>';
+
+    // Only show times after start time
+    for (let hour = startHour + 1; hour <= 22; hour++) {
+      const time24 = `${hour.toString().padStart(2, '0')}:00`;
+      const time12 = hour > 12 
+        ? `${hour - 12}:00 PM` 
+        : hour === 12 
+        ? '12:00 PM' 
+        : `${hour}:00 AM`;
+
+      const option = document.createElement('option');
+      option.value = time24;
+      option.textContent = time12;
+      endTimeSelect.appendChild(option);
+    }
+  }
+
+  function calculateDuration(startTime, endTime) {
+    if (!startTime || !endTime) return '';
+
+    const [startHour, startMin] = startTime.split(':').map(Number);
+    const [endHour, endMin] = endTime.split(':').map(Number);
+
+    const startMinutes = startHour * 60 + startMin;
+    const endMinutes = endHour * 60 + endMin;
+    const durationMinutes = endMinutes - startMinutes;
+
+    if (durationMinutes <= 0) return '';
+
+    const hours = Math.floor(durationMinutes / 60);
+    const minutes = durationMinutes % 60;
+
+    if (hours > 0 && minutes > 0) {
+      return `${hours}hr ${minutes}min`;
+    } else if (hours > 0) {
+      return `${hours}hr`;
+    } else {
+      return `${minutes}min`;
+    }
+  }
+
+  function updateDuration() {
+    if (!durationDisplay || !startTimeSelect || !endTimeSelect) return;
+
+    const startTime = startTimeSelect.value;
+    const endTime = endTimeSelect.value;
+
+    if (!startTime || !endTime) {
+      durationDisplay.innerHTML = `
+        <span class="duration-icon">⏱️</span>
+        <span class="duration-text">Select times to see duration</span>
+      `;
+      return;
+    }
+
+    const duration = calculateDuration(startTime, endTime);
+    if (!duration) {
+      durationDisplay.innerHTML = `
+        <span class="duration-icon">⚠️</span>
+        <span class="duration-text">End time must be after start time</span>
+      `;
+      return;
+    }
+
+    durationDisplay.innerHTML = `
+      <span class="duration-icon">⏱️</span>
+      <span class="duration-text">Session Duration: <strong>${duration}</strong></span>
+    `;
+    durationDisplay.classList.add('duration-active');
   }
 
   function displayBookings() {
@@ -210,7 +341,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const timeEl = document.createElement('div');
         timeEl.className = 'booking-info';
-        timeEl.textContent = `🕐 ${formatTime(booking.time)}`;
+        if (booking.startTime && booking.endTime) {
+          timeEl.textContent = `🕐 ${formatTime(booking.startTime)} - ${formatTime(booking.endTime)} (${booking.duration || calculateDuration(booking.startTime, booking.endTime)})`;
+        } else if (booking.time) {
+          // Legacy format support
+          timeEl.textContent = `🕐 ${formatTime(booking.time)}`;
+        }
 
         const subjectEl = document.createElement('div');
         subjectEl.className = 'booking-info';
@@ -288,6 +424,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = auth.getCurrentUser();
     
     // Email data
+    const timeDisplay = booking.startTime && booking.endTime 
+      ? `${formatTime(booking.startTime)} - ${formatTime(booking.endTime)} (${booking.duration || calculateDuration(booking.startTime, booking.endTime)})`
+      : formatTime(booking.time || booking.startTime);
+    
     const emailData = {
       to_email: 'mohamedhbuule2026@gmail.com',
       subject: `New Session Booking - ${user.username}`,
@@ -300,7 +440,7 @@ User Details:
 
 Booking Details:
 - Date: ${formatDate(booking.date)}
-- Time: ${formatTime(booking.time)}
+- Time: ${timeDisplay}
 - Subject: ${booking.subject}
 - Venue: ${booking.venue}
 - Booking ID: ${booking.id}
@@ -314,7 +454,9 @@ Booking Details:
         username: user.username,
         email: user.email,
         date: formatDate(booking.date),
-        time: formatTime(booking.time),
+        start_time: formatTime(booking.startTime || booking.time),
+        end_time: booking.endTime ? formatTime(booking.endTime) : '',
+        duration: booking.duration || calculateDuration(booking.startTime || booking.time, booking.endTime),
         subject: booking.subject,
         venue: booking.venue,
         booking_id: booking.id,
@@ -370,7 +512,9 @@ Your session has been booked successfully!
 
 Booking Details:
 - Date: ${formatDate(booking.date)}
-- Time: ${formatTime(booking.time)}
+- Time: ${booking.startTime && booking.endTime 
+  ? `${formatTime(booking.startTime)} - ${formatTime(booking.endTime)} (${booking.duration || calculateDuration(booking.startTime, booking.endTime)})`
+  : formatTime(booking.time || booking.startTime)}
 - Subject: ${booking.subject}
 - Venue: ${booking.venue}
 
@@ -387,7 +531,9 @@ The Juja B Fellas Team
         username: user.username,
         email: user.email,
         date: formatDate(booking.date),
-        time: formatTime(booking.time),
+        start_time: formatTime(booking.startTime || booking.time),
+        end_time: booking.endTime ? formatTime(booking.endTime) : '',
+        duration: booking.duration || calculateDuration(booking.startTime || booking.time, booking.endTime),
         subject: booking.subject,
         venue: booking.venue,
         to_email: user.email

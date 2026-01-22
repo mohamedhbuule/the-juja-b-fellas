@@ -170,8 +170,32 @@
               <!-- Step 2: Time Selection -->
               <div class="form-step" data-step="2">
                 <h2>Select Time</h2>
-                <p>Choose your preferred time (7:00 AM - 10:00 PM)</p>
-                <div class="time-grid" id="timeGrid"></div>
+                <p>Choose your session start and end time (7:00 AM - 10:00 PM)</p>
+                <div class="time-selection-container">
+                  <div class="time-select-group">
+                    <label for="startTime" class="time-label">
+                      <span class="time-label-icon">🕐</span>
+                      Start Time
+                    </label>
+                    <select id="startTime" name="startTime" class="time-select" required>
+                      <option value="">Select start time...</option>
+                    </select>
+                  </div>
+                  <div class="time-arrow">→</div>
+                  <div class="time-select-group">
+                    <label for="endTime" class="time-label">
+                      <span class="time-label-icon">🕐</span>
+                      End Time
+                    </label>
+                    <select id="endTime" name="endTime" class="time-select" required>
+                      <option value="">Select end time...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="duration-display" id="durationDisplay">
+                  <span class="duration-icon">⏱️</span>
+                  <span class="duration-text">Select times to see duration</span>
+                </div>
                 <div class="step-actions">
                   <button type="button" class="btn-secondary prev-step">
                     ← Back

@@ -113,10 +113,17 @@
   border-radius: 20px;
   padding: 40px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  animation: fadeInUp 0.6s ease;
+  animation-fill-mode: both;
 }
+
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
 
 .feature-card::before {
   content: '';
@@ -175,13 +182,38 @@
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass);
   border-radius: 20px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.6s ease;
+  animation-fill-mode: both;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.stat-item:hover::before {
+  left: 100%;
 }
 
 .stat-item:hover {
-  transform: scale(1.05);
+  transform: scale(1.08) translateY(-5px);
   border-color: var(--primary);
+  box-shadow: 0 10px 40px rgba(56, 189, 248, 0.3);
 }
+
+.stat-item:nth-child(1) { animation-delay: 0.1s; }
+.stat-item:nth-child(2) { animation-delay: 0.2s; }
+.stat-item:nth-child(3) { animation-delay: 0.3s; }
+.stat-item:nth-child(4) { animation-delay: 0.4s; }
 
 .stat-number {
   font-size: 3rem;
@@ -189,6 +221,22 @@
   color: var(--primary);
   margin-bottom: 10px;
   font-family: 'Playfair Display', serif;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.stat-item:hover .stat-number {
+  transform: scale(1.1);
+  animation: numberPulse 1s ease-in-out infinite;
+}
+
+@keyframes numberPulse {
+  0%, 100% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
 }
 
 .stat-label {
