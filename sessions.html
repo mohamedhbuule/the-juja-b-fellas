@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Book Session - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/sessions.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- EmailJS SDK -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+    <script>
+      // Initialize EmailJS (replace with your public key)
+      (function () {
+        emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Side Navigation -->
+    <nav id="sideNav" class="side-nav">
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="logo-icon">🕌</span>
+          <span class="logo-text">Juja B Fellas</span>
+        </div>
+        <button class="nav-close" id="navClose">×</button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="home.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="about.html" class="nav-link">📖 About</a></li>
+        <li>
+          <a href="sessions.html" class="nav-link active">📅 Book Session</a>
+        </li>
+        <li><a href="subjects.html" class="nav-link">📚 Subjects</a></li>
+        <li><a href="quotes.html" class="nav-link">💬 Motivation</a></li>
+        <li><a href="contact.html" class="nav-link">📧 Contact</a></li>
+        <li>
+          <button class="nav-link logout-btn" id="logoutBtn">🚪 Logout</button>
+        </li>
+      </ul>
+      <div class="nav-footer">
+        <p class="user-info" id="userInfo"></p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <button class="nav-toggle" id="navToggle">☰</button>
+
+      <section class="booking-section">
+        <div class="container">
+          <h1 class="page-title">Book Your Revision Session</h1>
+          <p class="page-subtitle">
+            You can book multiple sessions per day. Each session can have
+            different subject and venue.
+          </p>
+
+          <!-- Booking Steps Indicator -->
+          <div class="steps-indicator">
+            <div class="step active" data-step="1">
+              <div class="step-number">1</div>
+              <div class="step-label">Date</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+              <div class="step-number">2</div>
+              <div class="step-label">Time</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+              <div class="step-number">3</div>
+              <div class="step-label">Subject</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="4">
+              <div class="step-number">4</div>
+              <div class="step-label">Venue</div>
+            </div>
+          </div>
+
+          <!-- Booking Form -->
+          <div class="booking-container">
+            <form id="bookingForm" class="booking-form">
+              <!-- Step 1: Date Selection -->
+              <div class="form-step active" data-step="1">
+                <h2>Select Date</h2>
+                <p>Choose the date for your session (2nd - 6th February)</p>
+                <div class="date-grid">
+                  <label class="date-option">
+                    <input
+                      type="radio"
+                      name="sessionDate"
+                      value="2026-02-02"
+                      required
+                    />
+                    <div class="date-card">
+                      <div class="date-day">2</div>
+                      <div class="date-month">Feb</div>
+                      <div class="date-year">2026</div>
+                    </div>
+                  </label>
+                  <label class="date-option">
+                    <input
+                      type="radio"
+                      name="sessionDate"
+                      value="2026-02-03"
+                      required
+                    />
+                    <div class="date-card">
+                      <div class="date-day">3</div>
+                      <div class="date-month">Feb</div>
+                      <div class="date-year">2026</div>
+                    </div>
+                  </label>
+                  <label class="date-option">
+                    <input
+                      type="radio"
+                      name="sessionDate"
+                      value="2026-02-04"
+                      required
+                    />
+                    <div class="date-card">
+                      <div class="date-day">4</div>
+                      <div class="date-month">Feb</div>
+                      <div class="date-year">2026</div>
+                    </div>
+                  </label>
+                  <label class="date-option">
+                    <input
+                      type="radio"
+                      name="sessionDate"
+                      value="2026-02-05"
+                      required
+                    />
+                    <div class="date-card">
+                      <div class="date-day">5</div>
+                      <div class="date-month">Feb</div>
+                      <div class="date-year">2026</div>
+                    </div>
+                  </label>
+                  <label class="date-option">
+                    <input
+                      type="radio"
+                      name="sessionDate"
+                      value="2026-02-06"
+                      required
+                    />
+                    <div class="date-card">
+                      <div class="date-day">6</div>
+                      <div class="date-month">Feb</div>
+                      <div class="date-year">2026</div>
+                    </div>
+                  </label>
+                </div>
+                <button type="button" class="btn-primary next-step">
+                  Next: Choose Time
+                </button>
+              </div>
+
+              <!-- Step 2: Time Selection -->
+              <div class="form-step" data-step="2">
+                <h2>Select Time</h2>
+                <p>Choose your preferred time (7:00 AM - 10:00 PM)</p>
+                <div class="time-grid" id="timeGrid"></div>
+                <div class="step-actions">
+                  <button type="button" class="btn-secondary prev-step">
+                    ← Back
+                  </button>
+                  <button type="button" class="btn-primary next-step">
+                    Next: Choose Subject
+                  </button>
+                </div>
+              </div>
+
+              <!-- Step 3: Subject Selection -->
+              <div class="form-step" data-step="3">
+                <h2>Select Subject</h2>
+                <p>Choose the subject you want to study</p>
+                <div class="subject-grid">
+                  <label class="subject-option">
+                    <input
+                      type="radio"
+                      name="sessionSubject"
+                      value="Science of Hadith"
+                      required
+                    />
+                    <div class="subject-card">
+                      <div class="subject-icon">📘</div>
+                      <div class="subject-name">Science of Hadith</div>
+                    </div>
+                  </label>
+                  <label class="subject-option">
+                    <input
+                      type="radio"
+                      name="sessionSubject"
+                      value="Jurisprudence"
+                      required
+                    />
+                    <div class="subject-card">
+                      <div class="subject-icon">⚖️</div>
+                      <div class="subject-name">Jurisprudence</div>
+                    </div>
+                  </label>
+                  <label class="subject-option">
+                    <input
+                      type="radio"
+                      name="sessionSubject"
+                      value="Principles of Islamic Jurisprudence"
+                      required
+                    />
+                    <div class="subject-card">
+                      <div class="subject-icon">📜</div>
+                      <div class="subject-name">
+                        Principles of Islamic Jurisprudence
+                      </div>
+                    </div>
+                  </label>
+                  <label class="subject-option">
+                    <input
+                      type="radio"
+                      name="sessionSubject"
+                      value="Islamic Creed"
+                      required
+                    />
+                    <div class="subject-card">
+                      <div class="subject-icon">🧠</div>
+                      <div class="subject-name">Islamic Creed</div>
+                    </div>
+                  </label>
+                  <label class="subject-option">
+                    <input
+                      type="radio"
+                      name="sessionSubject"
+                      value="Hadith"
+                      required
+                    />
+                    <div class="subject-card">
+                      <div class="subject-icon">📖</div>
+                      <div class="subject-name">Hadith</div>
+                    </div>
+                  </label>
+                </div>
+                <div class="step-actions">
+                  <button type="button" class="btn-secondary prev-step">
+                    ← Back
+                  </button>
+                  <button type="button" class="btn-primary next-step">
+                    Next: Choose Venue
+                  </button>
+                </div>
+              </div>
+
+              <!-- Step 4: Venue Selection -->
+              <div class="form-step" data-step="4">
+                <h2>Select Venue</h2>
+                <p>Choose your preferred mosque venue</p>
+                <div class="venue-grid">
+                  <label class="venue-option">
+                    <input
+                      type="radio"
+                      name="sessionVenue"
+                      value="Al Basiirah Mosque"
+                      required
+                    />
+                    <div class="venue-card">
+                      <div class="venue-icon">🕌</div>
+                      <div class="venue-name">Al Basiirah Mosque</div>
+                    </div>
+                  </label>
+                  <label class="venue-option">
+                    <input
+                      type="radio"
+                      name="sessionVenue"
+                      value="Al Hijaaz Mosque"
+                      required
+                    />
+                    <div class="venue-card">
+                      <div class="venue-icon">🕌</div>
+                      <div class="venue-name">Al Hijaaz Mosque</div>
+                    </div>
+                  </label>
+                  <label class="venue-option">
+                    <input
+                      type="radio"
+                      name="sessionVenue"
+                      value="Masjid Abii Bakar"
+                      required
+                    />
+                    <div class="venue-card">
+                      <div class="venue-icon">🕌</div>
+                      <div class="venue-name">Masjid Abii Bakar</div>
+                    </div>
+                  </label>
+                  <label class="venue-option">
+                    <input
+                      type="radio"
+                      name="sessionVenue"
+                      value="Al Hidaayah Mosque"
+                      required
+                    />
+                    <div class="venue-card">
+                      <div class="venue-icon">🕌</div>
+                      <div class="venue-name">Al Hidaayah Mosque</div>
+                    </div>
+                  </label>
+                </div>
+                <div class="step-actions">
+                  <button type="button" class="btn-secondary prev-step">
+                    ← Back
+                  </button>
+                  <button type="submit" class="btn-primary">
+                    Complete Booking
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- My Bookings Section -->
+          <div class="my-bookings-section">
+            <h2>My Bookings</h2>
+            <div id="myBookings" class="bookings-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Success Modal -->
+      <div id="successModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="success-icon">✓</div>
+          <h3>Session Booked Successfully!</h3>
+          <p>Your booking has been confirmed and sent to your email.</p>
+          <button class="btn-primary" id="closeSuccessModal">Continue</button>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/sessions.js"></script>
+  </body>
+</html>

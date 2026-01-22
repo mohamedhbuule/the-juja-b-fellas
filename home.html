@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Home - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/home.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Side Navigation -->
+    <nav id="sideNav" class="side-nav">
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="logo-icon">🕌</span>
+          <span class="logo-text">Juja B Fellas</span>
+        </div>
+        <button class="nav-close" id="navClose">×</button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="home.html" class="nav-link active">🏠 Home</a></li>
+        <li><a href="about.html" class="nav-link">📖 About</a></li>
+        <li><a href="sessions.html" class="nav-link">📅 Book Session</a></li>
+        <li><a href="subjects.html" class="nav-link">📚 Subjects</a></li>
+        <li><a href="quotes.html" class="nav-link">💬 Motivation</a></li>
+        <li><a href="contact.html" class="nav-link">📧 Contact</a></li>
+        <li>
+          <button class="nav-link logout-btn" id="logoutBtn">🚪 Logout</button>
+        </li>
+      </ul>
+      <div class="nav-footer">
+        <p class="user-info" id="userInfo"></p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <button class="nav-toggle" id="navToggle">☰</button>
+
+      <section class="hero-section">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="title-line">Revising Together.</span>
+            <span class="title-line">Succeeding Together.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Organized Islamic revision meetups for academic & spiritual
+            excellence
+          </p>
+          <div class="hero-actions">
+            <a href="sessions.html" class="btn-primary">Book Your Session</a>
+            <a href="about.html" class="btn-secondary">Learn More</a>
+          </div>
+        </div>
+        <div class="hero-decoration">
+          <div class="decoration-circle"></div>
+          <div class="decoration-circle"></div>
+          <div class="decoration-circle"></div>
+        </div>
+      </section>
+
+      <section class="features-section">
+        <div class="container">
+          <h2 class="section-title">Why Choose Us?</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">📚</div>
+              <h3>Structured Learning</h3>
+              <p>
+                Organized study sessions with clear objectives and structured
+                curriculum
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🤝</div>
+              <h3>Community Support</h3>
+              <p>
+                Learn alongside fellow students in a supportive Islamic
+                environment
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🕌</div>
+              <h3>Sacred Spaces</h3>
+              <p>
+                Study sessions held in beautiful mosques within Juja for
+                spiritual focus
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">⏰</div>
+              <h3>Flexible Scheduling</h3>
+              <p>
+                Choose your preferred dates, times, and subjects to fit your
+                schedule
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-stats">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number" id="totalSessions">0</div>
+              <div class="stat-label">Sessions Available</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">5</div>
+              <div class="stat-label">Subjects</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">4</div>
+              <div class="stat-label">Venues</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">5</div>
+              <div class="stat-label">Days</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/home.js"></script>
+  </body>
+</html>

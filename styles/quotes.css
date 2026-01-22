@@ -1,0 +1,88 @@
+/* Quotes/Motivation Page Styles */
+.quotes-hero {
+  padding: 120px 20px 60px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), transparent);
+}
+
+.quotes-content {
+  padding: 80px 20px;
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.quote-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass);
+  border-radius: 24px;
+  padding: 40px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-card::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  font-size: 120px;
+  color: rgba(56, 189, 248, 0.1);
+  font-family: 'Playfair Display', serif;
+  line-height: 1;
+}
+
+.quote-card.featured {
+  grid-column: span 2;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(56, 189, 248, 0.05));
+  border-color: var(--primary);
+}
+
+.quote-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(56, 189, 248, 0.2);
+  border-color: var(--primary);
+}
+
+.quote-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.quote-card blockquote {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: var(--text-light);
+  font-style: italic;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  font-family: 'Playfair Display', serif;
+}
+
+.quote-card cite {
+  display: block;
+  color: var(--primary);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  margin-top: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .quote-card.featured {
+    grid-column: span 1;
+  }
+
+  .quote-card blockquote {
+    font-size: 1.1rem;
+  }
+}

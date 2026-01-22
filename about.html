@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>About - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/about.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Side Navigation -->
+    <nav id="sideNav" class="side-nav">
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="logo-icon">🕌</span>
+          <span class="logo-text">Juja B Fellas</span>
+        </div>
+        <button class="nav-close" id="navClose">×</button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="home.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="about.html" class="nav-link active">📖 About</a></li>
+        <li><a href="sessions.html" class="nav-link">📅 Book Session</a></li>
+        <li><a href="subjects.html" class="nav-link">📚 Subjects</a></li>
+        <li><a href="quotes.html" class="nav-link">💬 Motivation</a></li>
+        <li><a href="contact.html" class="nav-link">📧 Contact</a></li>
+        <li>
+          <button class="nav-link logout-btn" id="logoutBtn">🚪 Logout</button>
+        </li>
+      </ul>
+      <div class="nav-footer">
+        <p class="user-info" id="userInfo"></p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <button class="nav-toggle" id="navToggle">☰</button>
+
+      <section class="about-hero">
+        <div class="container">
+          <h1 class="page-title">About Us</h1>
+          <div class="title-underline"></div>
+        </div>
+      </section>
+
+      <section class="about-content">
+        <div class="container">
+          <div class="about-card">
+            <div class="about-icon">🕌</div>
+            <h2>Our Mission</h2>
+            <p>
+              THE JUJA B FELLAS is a student-led revision organization focused
+              on preparing for exams through structured Islamic study sessions
+              held in mosques within Juja. We believe in combining academic
+              excellence with spiritual growth, creating an environment where
+              students can thrive both intellectually and spiritually.
+            </p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-icon">🎯</div>
+            <h2>Our Vision</h2>
+            <p>
+              To create a supportive community of learners who excel in their
+              studies while maintaining strong Islamic values. We envision a
+              space where knowledge is sought with sincerity, shared with
+              generosity, and applied with wisdom.
+            </p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-icon">💡</div>
+            <h2>What We Offer</h2>
+            <ul class="offer-list">
+              <li>
+                <span class="list-icon">✓</span>
+                Structured revision sessions in peaceful mosque environments
+              </li>
+              <li>
+                <span class="list-icon">✓</span>
+                Flexible scheduling to accommodate your needs
+              </li>
+              <li>
+                <span class="list-icon">✓</span>
+                Multiple subjects covering Islamic studies
+              </li>
+              <li>
+                <span class="list-icon">✓</span>
+                Community support and peer learning opportunities
+              </li>
+              <li>
+                <span class="list-icon">✓</span>
+                Expert guidance and organized study materials
+              </li>
+            </ul>
+          </div>
+
+          <div class="about-card">
+            <div class="about-icon">🤝</div>
+            <h2>Join Us</h2>
+            <p>
+              Whether you're preparing for exams or seeking to deepen your
+              understanding of Islamic knowledge, we welcome you to join our
+              community. Together, we can achieve academic success while
+              strengthening our faith.
+            </p>
+            <a href="sessions.html" class="btn-primary">Start Your Journey</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>

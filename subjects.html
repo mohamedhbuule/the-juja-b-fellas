@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Subjects - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/subjects.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Side Navigation -->
+    <nav id="sideNav" class="side-nav">
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="logo-icon">🕌</span>
+          <span class="logo-text">Juja B Fellas</span>
+        </div>
+        <button class="nav-close" id="navClose">×</button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="home.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="about.html" class="nav-link">📖 About</a></li>
+        <li><a href="sessions.html" class="nav-link">📅 Book Session</a></li>
+        <li>
+          <a href="subjects.html" class="nav-link active">📚 Subjects</a>
+        </li>
+        <li><a href="quotes.html" class="nav-link">💬 Motivation</a></li>
+        <li><a href="contact.html" class="nav-link">📧 Contact</a></li>
+        <li>
+          <button class="nav-link logout-btn" id="logoutBtn">🚪 Logout</button>
+        </li>
+      </ul>
+      <div class="nav-footer">
+        <p class="user-info" id="userInfo"></p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <button class="nav-toggle" id="navToggle">☰</button>
+
+      <section class="subjects-hero">
+        <div class="container">
+          <h1 class="page-title">Subjects of Revision</h1>
+          <p class="page-subtitle">
+            Explore the comprehensive Islamic studies curriculum
+          </p>
+        </div>
+      </section>
+
+      <section class="subjects-content">
+        <div class="container">
+          <div class="subjects-grid">
+            <div class="subject-card">
+              <div class="subject-header">
+                <div class="subject-icon-large">📘</div>
+                <h2>Science of Hadith</h2>
+              </div>
+              <div class="subject-body">
+                <p>
+                  Study the methodology and principles of Hadith science,
+                  including authentication, classification, and transmission of
+                  prophetic traditions.
+                </p>
+                <ul class="subject-topics">
+                  <li>Hadith Terminology</li>
+                  <li>Chain of Transmission</li>
+                  <li>Authenticity Criteria</li>
+                  <li>Hadith Classification</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="subject-card">
+              <div class="subject-header">
+                <div class="subject-icon-large">⚖️</div>
+                <h2>Jurisprudence</h2>
+              </div>
+              <div class="subject-body">
+                <p>
+                  Deep dive into Islamic law, understanding legal rulings,
+                  methodologies, and practical applications in daily life.
+                </p>
+                <ul class="subject-topics">
+                  <li>Worship Laws</li>
+                  <li>Transactions</li>
+                  <li>Family Law</li>
+                  <li>Legal Maxims</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="subject-card">
+              <div class="subject-header">
+                <div class="subject-icon-large">📜</div>
+                <h2>Principles of Islamic Jurisprudence</h2>
+              </div>
+              <div class="subject-body">
+                <p>
+                  Master the foundational principles and methodologies used in
+                  deriving Islamic legal rulings from primary sources.
+                </p>
+                <ul class="subject-topics">
+                  <li>Sources of Law</li>
+                  <li>Legal Reasoning</li>
+                  <li>Analogical Reasoning</li>
+                  <li>Consensus & Precedent</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="subject-card">
+              <div class="subject-header">
+                <div class="subject-icon-large">🧠</div>
+                <h2>Islamic Creed</h2>
+              </div>
+              <div class="subject-body">
+                <p>
+                  Explore the fundamental beliefs and theological principles of
+                  Islam, understanding the core tenets of faith.
+                </p>
+                <ul class="subject-topics">
+                  <li>Belief in Allah</li>
+                  <li>Prophets & Messengers</li>
+                  <li>Divine Books</li>
+                  <li>Day of Judgment</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="subject-card">
+              <div class="subject-header">
+                <div class="subject-icon-large">📖</div>
+                <h2>Hadith</h2>
+              </div>
+              <div class="subject-body">
+                <p>
+                  Study the sayings, actions, and approvals of Prophet Muhammad
+                  (peace be upon him) and their practical applications.
+                </p>
+                <ul class="subject-topics">
+                  <li>Major Hadith Collections</li>
+                  <li>Prophetic Guidance</li>
+                  <li>Practical Applications</li>
+                  <li>Contemporary Relevance</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-section">
+            <h2>Ready to Start Learning?</h2>
+            <p>Book your revision session and begin your journey</p>
+            <a href="sessions.html" class="btn-primary">Book Session Now</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/register.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="register-page">
+    <div class="register-container">
+      <div class="register-card">
+        <div class="register-header">
+          <div class="logo-wrapper">
+            <span class="logo-icon">🕌</span>
+          </div>
+          <h1>Create Account</h1>
+          <p>Join The Juja B Fellas community</p>
+        </div>
+
+        <form id="registerForm" class="register-form">
+          <div class="input-group">
+            <input
+              type="text"
+              id="regUsername"
+              placeholder=" "
+              required
+              minlength="3"
+              autocomplete="username"
+            />
+            <label for="regUsername">Username</label>
+            <span class="input-icon">👤</span>
+          </div>
+
+          <div class="input-group">
+            <input
+              type="email"
+              id="regEmail"
+              placeholder=" "
+              required
+              autocomplete="email"
+            />
+            <label for="regEmail">Email Address</label>
+            <span class="input-icon">📧</span>
+          </div>
+
+          <div class="input-group">
+            <input
+              type="password"
+              id="regPassword"
+              placeholder=" "
+              required
+              minlength="6"
+              autocomplete="new-password"
+            />
+            <label for="regPassword">Password</label>
+            <span class="input-icon">🔒</span>
+            <button
+              type="button"
+              class="toggle-password"
+              id="toggleRegPassword"
+            >
+              👁️
+            </button>
+          </div>
+
+          <div class="input-group">
+            <input
+              type="password"
+              id="regConfirmPassword"
+              placeholder=" "
+              required
+              autocomplete="new-password"
+            />
+            <label for="regConfirmPassword">Confirm Password</label>
+            <span class="input-icon">🔒</span>
+            <button
+              type="button"
+              class="toggle-password"
+              id="toggleRegConfirmPassword"
+            >
+              👁️
+            </button>
+          </div>
+
+          <div id="registerError" class="error-message hidden"></div>
+
+          <button type="submit" class="btn-primary">
+            <span>Create Account</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M7.5 15L12.5 10L7.5 5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
+
+        <div class="register-footer">
+          <p>
+            Already have an account?
+            <a href="index.html" class="link">Login here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/register.js"></script>
+  </body>
+</html>

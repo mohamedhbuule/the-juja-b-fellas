@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contact - The Juja B Fellas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/contact.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- EmailJS SDK -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+    <script>
+      // Initialize EmailJS (replace with your public key)
+      (function () {
+        emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Side Navigation -->
+    <nav id="sideNav" class="side-nav">
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="logo-icon">🕌</span>
+          <span class="logo-text">Juja B Fellas</span>
+        </div>
+        <button class="nav-close" id="navClose">×</button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="home.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="about.html" class="nav-link">📖 About</a></li>
+        <li><a href="sessions.html" class="nav-link">📅 Book Session</a></li>
+        <li><a href="subjects.html" class="nav-link">📚 Subjects</a></li>
+        <li><a href="quotes.html" class="nav-link">💬 Motivation</a></li>
+        <li>
+          <a href="contact.html" class="nav-link active">📧 Contact</a>
+        </li>
+        <li>
+          <button class="nav-link logout-btn" id="logoutBtn">🚪 Logout</button>
+        </li>
+      </ul>
+      <div class="nav-footer">
+        <p class="user-info" id="userInfo"></p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <button class="nav-toggle" id="navToggle">☰</button>
+
+      <section class="contact-hero">
+        <div class="container">
+          <h1 class="page-title">Get In Touch</h1>
+          <p class="page-subtitle">
+            We're here to help. Reach out to us anytime!
+          </p>
+        </div>
+      </section>
+
+      <section class="contact-content">
+        <div class="container">
+          <div class="contact-grid">
+            <div class="contact-info">
+              <div class="info-card">
+                <div class="info-icon">📧</div>
+                <h3>Email</h3>
+                <p>
+                  <a href="mailto:mohamedhbuule2026@gmail.com"
+                    >mohamedhbuule2026@gmail.com</a
+                  >
+                </p>
+              </div>
+
+              <div class="info-card">
+                <div class="info-icon">📞</div>
+                <h3>Phone</h3>
+                <p>
+                  <a href="tel:+254745541134">+254 745 541 134</a>
+                </p>
+              </div>
+
+              <div class="info-card">
+                <div class="info-icon">🕌</div>
+                <h3>Location</h3>
+                <p>Juja, Kenya</p>
+              </div>
+
+              <div class="info-card">
+                <div class="info-icon">⏰</div>
+                <h3>Response Time</h3>
+                <p>We typically respond within 24 hours</p>
+              </div>
+            </div>
+
+            <div class="contact-form-wrapper">
+              <div class="form-card">
+                <h2>Send us a Message</h2>
+                <form id="contactForm" class="contact-form">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="contactName"
+                      placeholder=" "
+                      required
+                    />
+                    <label for="contactName">Your Name</label>
+                  </div>
+
+                  <div class="input-group">
+                    <input
+                      type="email"
+                      id="contactEmail"
+                      placeholder=" "
+                      required
+                    />
+                    <label for="contactEmail">Your Email</label>
+                  </div>
+
+                  <div class="input-group">
+                    <textarea
+                      id="contactMessage"
+                      placeholder=" "
+                      rows="5"
+                      required
+                    ></textarea>
+                    <label for="contactMessage">Your Message</label>
+                  </div>
+
+                  <button type="submit" class="btn-primary">
+                    <span>Send Message</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path
+                        d="M7.5 15L12.5 10L7.5 5"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/contact.js"></script>
+  </body>
+</html>
