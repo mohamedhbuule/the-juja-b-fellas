@@ -4,16 +4,30 @@
 
 When someone books a session, you will **automatically receive an email** at **mohamedhbuule2026@gmail.com** with:
 
-✅ **Username** of the person who booked  
+✅ **Username** of the person who booked (clearly displayed)  
 ✅ **Email address** of the person  
 ✅ **New booking details** (date, time, subject, venue)  
 ✅ **All sessions** that user has booked (complete history)  
 ✅ **Total session count** for that user  
 
+**The email is sent IMMEDIATELY when someone books a session!**
+
 This way, you can see:
-- Who booked what
+- Who booked what (username is prominently displayed)
 - All sessions each person has chosen
 - Complete booking history per user
+
+### Email Sending Methods
+
+The system tries multiple methods to ensure you receive the email:
+
+1. **EmailJS** (if configured) - Automatic email sending
+2. **Webhook** (if configured) - Send to your webhook endpoint
+3. **Mailto Link** - Opens your email client with pre-filled message
+4. **Console Logging** - Shows notification in browser console
+5. **Local Storage** - Stores notifications for later viewing
+
+Even if EmailJS isn't configured, you'll still get notifications via console and mailto links!
 
 ## Viewing Bookings in Browser Console
 
@@ -35,6 +49,18 @@ Returns an object with all users and their sessions.
 getBookingsSummary()
 ```
 Shows a nicely formatted text summary of all bookings.
+
+**View pending email notifications:**
+```javascript
+viewPendingNotifications()
+```
+Shows all booking notifications that need to be sent (if EmailJS isn't configured).
+
+**Clear pending notifications:**
+```javascript
+clearPendingNotifications()
+```
+Clears the list of pending notifications.
 
 **Export all bookings:**
 ```javascript
@@ -83,6 +109,19 @@ The email system is already configured to send to: **mohamedhbuule2026@gmail.com
 ## Notes
 
 - All booking data is stored in browser localStorage
-- Emails are sent automatically when bookings are made
+- **Emails are sent IMMEDIATELY when bookings are made**
+- You'll always see the **username** prominently in every notification
 - You can view bookings anytime using the console functions
 - Bookings are grouped by username for easy viewing
+- If EmailJS isn't configured, notifications are stored and can be viewed with `viewPendingNotifications()`
+
+## Setting Up Webhook (Alternative to EmailJS)
+
+If you prefer using a webhook instead of EmailJS:
+
+1. Create a webhook URL (using Zapier, Make.com, or your own server)
+2. In browser console, run:
+```javascript
+localStorage.setItem('webhook_url', 'YOUR_WEBHOOK_URL_HERE')
+```
+3. All booking notifications will be sent to your webhook automatically

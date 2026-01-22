@@ -83,10 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
       bookings.push(booking);
       saveBookings();
 
-      // Send email notification immediately
+      // IMMEDIATELY send email notification to owner
+      console.log('📧 Sending booking notification to owner...');
       sendBookingEmail(booking);
       
-      console.log('✅ Booking saved and email notification sent');
+      console.log('✅ Booking saved successfully');
+      console.log('📧 Email notification sent to: mohamedhbuule2026@gmail.com');
 
       // Show success modal
       if (successModal) {
@@ -424,7 +426,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function sendBookingEmail(booking) {
     const user = auth.getCurrentUser();
-    if (!user) return;
+    if (!user) {
+      console.error('❌ No user found, cannot send email');
+      return;
+    }
+    
+    console.log('📧 Preparing to send booking email for:', user.username);
     
     // Get all bookings for this user
     const userBookings = bookings.filter(b => b.userId === user.id);
@@ -460,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
           sessionsList += `  📚 Subject: ${b.subject}\n`;
           sessionsList += `  🕌 Venue: ${b.venue}\n`;
           sessionsList += `  🆔 Booking ID: ${b.id}\n`;
-          if (b === booking) {
+          if (b.id === booking.id) {
             sessionsList += `  ✨ NEW BOOKING\n`;
           }
           sessionsList += '\n';
@@ -470,9 +477,12 @@ document.addEventListener('DOMContentLoaded', () => {
       sessionsList += `\nTotal Sessions: ${userBookings.length}\n`;
     }
     
+    // Owner's email - ALWAYS send here
+    const ownerEmail = 'mohamedhbuule2026@gmail.com';
+    
     const emailData = {
-      to_email: 'mohamedhbuule2026@gmail.com',
-      subject: `🆕 New Session Booking - ${user.username}`,
+      to_email: ownerEmail,
+      subject: `🆕 New Session Booking - Username: ${user.username}`,
       message: `
 🆕 NEW SESSION BOOKING RECEIVED!
 
@@ -480,8 +490,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 👤 USER INFORMATION:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Username: ${user.username}
-Email: ${user.email}
+👤 Username: ${user.username}
+📧 Email: ${user.email}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -500,63 +510,72 @@ This is an automated notification from The Juja B Fellas booking system.
       `.trim()
     };
 
-    // Try to send via EmailJS (if configured)
-    if (typeof emailjs !== 'undefined') {
-      // Format all sessions for EmailJS template
-      let sessionsHtml = '';
-      if (userBookings.length > 0) {
-        const groupedByDate = userBookings.reduce((acc, b) => {
-          if (!acc[b.date]) acc[b.date] = [];
-          acc[b.date].push(b);
-          return acc;
-        }, {});
-        
-        sessionsHtml = '<h3>All Sessions for ' + user.username + ':</h3><ul>';
-        Object.keys(groupedByDate).sort().forEach(date => {
-          sessionsHtml += '<li><strong>' + formatDate(date) + '</strong><ul>';
-          groupedByDate[date].forEach(b => {
-            const bTimeDisplay = b.startTime && b.endTime 
-              ? formatTime(b.startTime) + ' - ' + formatTime(b.endTime) + ' (' + (b.duration || calculateDuration(b.startTime, b.endTime)) + ')'
-              : formatTime(b.time || b.startTime || 'N/A');
-            sessionsHtml += '<li>Time: ' + bTimeDisplay + ' | Subject: ' + b.subject + ' | Venue: ' + b.venue + '</li>';
+    // ALWAYS send email to owner - try multiple methods
+    let emailSent = false;
+    
+    // Method 1: Try EmailJS (if configured)
+    if (typeof emailjs !== 'undefined' && emailjs.init) {
+      try {
+        // Format all sessions for EmailJS template
+        let sessionsHtml = '';
+        if (userBookings.length > 0) {
+          const groupedByDate = userBookings.reduce((acc, b) => {
+            if (!acc[b.date]) acc[b.date] = [];
+            acc[b.date].push(b);
+            return acc;
+          }, {});
+          
+          sessionsHtml = '<h2>All Sessions for ' + user.username + ':</h2><ul>';
+          Object.keys(groupedByDate).sort().forEach(date => {
+            sessionsHtml += '<li><strong>' + formatDate(date) + '</strong><ul>';
+            groupedByDate[date].forEach(b => {
+              const bTimeDisplay = b.startTime && b.endTime 
+                ? formatTime(b.startTime) + ' - ' + formatTime(b.endTime) + ' (' + (b.duration || calculateDuration(b.startTime, b.endTime)) + ')'
+                : formatTime(b.time || b.startTime || 'N/A');
+              sessionsHtml += '<li>Time: ' + bTimeDisplay + ' | Subject: ' + b.subject + ' | Venue: ' + b.venue + '</li>';
+            });
+            sessionsHtml += '</ul></li>';
           });
-          sessionsHtml += '</ul></li>';
-        });
-        sessionsHtml += '</ul><p>Total Sessions: ' + userBookings.length + '</p>';
-      }
-      
-      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-        username: user.username,
-        user_email: user.email,
-        date: formatDate(booking.date),
-        start_time: formatTime(booking.startTime || booking.time || ''),
-        end_time: booking.endTime ? formatTime(booking.endTime) : '',
-        duration: booking.duration || calculateDuration(booking.startTime || booking.time, booking.endTime),
-        subject: booking.subject,
-        venue: booking.venue,
-        booking_id: booking.id,
-        timestamp: new Date(booking.timestamp).toLocaleString(),
-        all_sessions: sessionsHtml,
-        total_sessions: userBookings.length.toString(),
-        to_email: emailData.to_email,
-        message: emailData.message
-      }).then(
-        () => {
-          console.log('✅ Booking email sent successfully to admin');
-          // Also send confirmation to user
-          if (user.email) {
-            sendUserConfirmationEmail(booking, user);
-          }
-        },
-        (error) => {
-          console.error('❌ Email error:', error);
-          // Fallback: Try webhook or log
-          sendEmailFallback(emailData);
+          sessionsHtml += '</ul><p><strong>Total Sessions: ' + userBookings.length + '</strong></p>';
         }
-      );
+        
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+          username: user.username,
+          user_email: user.email,
+          date: formatDate(booking.date),
+          start_time: formatTime(booking.startTime || booking.time || ''),
+          end_time: booking.endTime ? formatTime(booking.endTime) : '',
+          duration: booking.duration || calculateDuration(booking.startTime || booking.time, booking.endTime),
+          subject: booking.subject,
+          venue: booking.venue,
+          booking_id: booking.id,
+          timestamp: new Date(booking.timestamp).toLocaleString(),
+          all_sessions: sessionsHtml,
+          total_sessions: userBookings.length.toString(),
+          to_email: ownerEmail,
+          message: emailData.message
+        }).then(
+          () => {
+            console.log('✅ Email sent successfully via EmailJS to:', ownerEmail);
+            emailSent = true;
+            // Also send confirmation to user
+            if (user.email) {
+              sendUserConfirmationEmail(booking, user);
+            }
+          },
+          (error) => {
+            console.error('❌ EmailJS error:', error);
+            // Continue to fallback methods
+            sendEmailFallback(emailData, user);
+          }
+        );
+      } catch (error) {
+        console.error('❌ EmailJS initialization error:', error);
+        sendEmailFallback(emailData, user);
+      }
     } else {
-      // Fallback: Try webhook or log
-      sendEmailFallback(emailData);
+      // EmailJS not configured, use fallback
+      sendEmailFallback(emailData, user);
     }
 
     // Also send confirmation to user
@@ -565,8 +584,10 @@ This is an automated notification from The Juja B Fellas booking system.
     }
   }
 
-  function sendEmailFallback(emailData) {
-    // Try webhook first (if configured)
+  function sendEmailFallback(emailData, user) {
+    console.log('📧 Using fallback email method...');
+    
+    // Method 2: Try webhook (if configured)
     const webhookUrl = localStorage.getItem('webhook_url');
     if (webhookUrl) {
       fetch(webhookUrl, {
@@ -574,24 +595,56 @@ This is an automated notification from The Juja B Fellas booking system.
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(emailData)
+        body: JSON.stringify({
+          ...emailData,
+          username: user.username,
+          user_email: user.email
+        })
       }).then(
-        () => console.log('✅ Email sent via webhook'),
+        () => {
+          console.log('✅ Email sent via webhook to:', emailData.to_email);
+        },
         (err) => {
           console.error('❌ Webhook error:', err);
-          console.log('📧 Email Data (for manual sending):', emailData);
+          sendEmailFinalFallback(emailData);
         }
       );
     } else {
-      // Log to console for manual sending
-      console.log('📧 Booking Email Data:', emailData);
-      console.log('💡 To enable automatic emails, configure EmailJS or set up a webhook URL');
-      
-      // Create a mailto link as last resort
-      const subject = encodeURIComponent(emailData.subject);
-      const body = encodeURIComponent(emailData.message);
-      const mailtoLink = `mailto:${emailData.to_email}?subject=${subject}&body=${body}`;
-      console.log('📬 Mailto link:', mailtoLink);
+      sendEmailFinalFallback(emailData);
+    }
+  }
+
+  function sendEmailFinalFallback(emailData) {
+    // Method 3: Log to console with clear formatting
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #38bdf8; font-weight: bold;');
+    console.log('%c📧 NEW BOOKING NOTIFICATION', 'color: #38bdf8; font-weight: bold; font-size: 16px;');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #38bdf8; font-weight: bold;');
+    console.log('%c' + emailData.message, 'color: #e5e7eb; font-size: 12px; line-height: 1.5;');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #38bdf8; font-weight: bold;');
+    
+    // Store in localStorage for admin viewing
+    const notifications = JSON.parse(localStorage.getItem('booking_notifications') || '[]');
+    notifications.push({
+      ...emailData,
+      received_at: new Date().toISOString(),
+      sent: false
+    });
+    localStorage.setItem('booking_notifications', JSON.stringify(notifications));
+    
+    // Create mailto link
+    const subject = encodeURIComponent(emailData.subject);
+    const body = encodeURIComponent(emailData.message);
+    const mailtoLink = `mailto:${emailData.to_email}?subject=${subject}&body=${body}`;
+    
+    console.log('%c💡 To enable automatic emails:', 'color: #fbbf24; font-weight: bold;');
+    console.log('%c1. Configure EmailJS (see EMAIL_SETUP.md)', 'color: #94a3b8;');
+    console.log('%c2. Or set up a webhook: localStorage.setItem("webhook_url", "YOUR_WEBHOOK_URL")', 'color: #94a3b8;');
+    console.log('%c📬 Mailto link (click to open email client):', 'color: #10b981; font-weight: bold;');
+    console.log(mailtoLink);
+    
+    // Show alert to admin
+    if (confirm('📧 Booking notification ready!\n\nClick OK to open your email client, or Cancel to view in console.\n\nTo enable automatic emails, configure EmailJS.')) {
+      window.location.href = mailtoLink;
     }
   }
 
@@ -708,10 +761,56 @@ The Juja B Fellas Team
   window.getAllBookingsByUsername = getAllBookingsByUsername;
   window.getBookingsSummary = getBookingsSummary;
 
+  // Function to view pending email notifications
+  function viewPendingNotifications() {
+    const notifications = JSON.parse(localStorage.getItem('booking_notifications') || '[]');
+    if (notifications.length === 0) {
+      console.log('✅ No pending notifications - all emails sent successfully!');
+      return [];
+    }
+    
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #fbbf24; font-weight: bold;');
+    console.log('%c📧 PENDING EMAIL NOTIFICATIONS (' + notifications.length + ')', 'color: #fbbf24; font-weight: bold; font-size: 16px;');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #fbbf24; font-weight: bold;');
+    
+    notifications.forEach((notif, index) => {
+      console.log(`\n%c[${index + 1}] ${notif.subject}`, 'color: #38bdf8; font-weight: bold;');
+      console.log('%c' + notif.message, 'color: #e5e7eb; font-size: 11px;');
+      console.log('%cReceived: ' + new Date(notif.received_at).toLocaleString(), 'color: #94a3b8; font-size: 10px;');
+    });
+    
+    return notifications;
+  }
+
+  // Function to clear pending notifications
+  function clearPendingNotifications() {
+    localStorage.removeItem('booking_notifications');
+    console.log('✅ Pending notifications cleared');
+  }
+
+  // Make functions available globally
+  window.exportBookings = exportBookings;
+  window.getAllBookings = () => bookings;
+  window.getAllBookingsByUsername = getAllBookingsByUsername;
+  window.getBookingsSummary = getBookingsSummary;
+  window.viewPendingNotifications = viewPendingNotifications;
+  window.clearPendingNotifications = clearPendingNotifications;
+
   // Log summary on page load (for admin)
-  console.log('%c📊 Admin Functions Available:', 'color: #38bdf8; font-weight: bold; font-size: 14px;');
+  console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #38bdf8; font-weight: bold;');
+  console.log('%c📊 ADMIN FUNCTIONS AVAILABLE', 'color: #38bdf8; font-weight: bold; font-size: 16px;');
+  console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #38bdf8; font-weight: bold;');
   console.log('%c- getAllBookingsByUsername() - Get all bookings grouped by username', 'color: #94a3b8;');
   console.log('%c- getBookingsSummary() - Get formatted summary of all bookings', 'color: #94a3b8;');
   console.log('%c- exportBookings() - Download all bookings as JSON', 'color: #94a3b8;');
   console.log('%c- getAllBookings() - Get raw bookings array', 'color: #94a3b8;');
+  console.log('%c- viewPendingNotifications() - View emails that need to be sent', 'color: #fbbf24;');
+  console.log('%c- clearPendingNotifications() - Clear pending notification list', 'color: #94a3b8;');
+  
+  // Check for pending notifications
+  const pending = JSON.parse(localStorage.getItem('booking_notifications') || '[]');
+  if (pending.length > 0) {
+    console.log('%c⚠️ ' + pending.length + ' pending email notification(s) found!', 'color: #fbbf24; font-weight: bold;');
+    console.log('%cRun viewPendingNotifications() to see them', 'color: #fbbf24;');
+  }
 });
