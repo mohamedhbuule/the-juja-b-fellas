@@ -22,25 +22,58 @@ This guide will help you set up automatic email notifications for booking confir
 
 **Subject:**
 ```
-New Session Booking - {{username}}
+🆕 New Session Booking - {{username}}
 ```
 
-**Content:**
+**Content (HTML or Text):**
 ```
-New Session Booking Received!
+🆕 NEW SESSION BOOKING RECEIVED!
 
-User Details:
-- Username: {{username}}
-- Email: {{email}}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Booking Details:
-- Date: {{date}}
-- Time: {{time}}
-- Subject: {{subject}}
-- Venue: {{venue}}
-- Booking ID: {{booking_id}}
-- Booked At: {{timestamp}}
+👤 USER INFORMATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Username: {{username}}
+Email: {{user_email}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 NEW BOOKING DETAILS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 Date: {{date}}
+🕐 Time: {{start_time}} - {{end_time}} ({{duration}})
+📚 Subject: {{subject}}
+🕌 Venue: {{venue}}
+🆔 Booking ID: {{booking_id}}
+⏰ Booked At: {{timestamp}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 ALL SESSIONS FOR THIS USER:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{{all_sessions}}
+
+Total Sessions: {{total_sessions}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is an automated notification from The Juja B Fellas booking system.
 ```
+
+**Available Template Variables:**
+- `{{username}}` - User's username
+- `{{user_email}}` - User's email address
+- `{{date}}` - Booking date (formatted)
+- `{{start_time}}` - Session start time
+- `{{end_time}}` - Session end time
+- `{{duration}}` - Session duration (e.g., "2hr 30min")
+- `{{subject}}` - Subject name
+- `{{venue}}` - Venue name
+- `{{booking_id}}` - Unique booking ID
+- `{{timestamp}}` - When booking was made
+- `{{all_sessions}}` - HTML list of all user's sessions
+- `{{total_sessions}}` - Total number of sessions for this user
+- `{{message}}` - Full formatted message (alternative)
 
 4. Save and copy your **Template ID**
 
@@ -55,24 +88,20 @@ Booking Details:
 4. Replace `YOUR_SERVICE_ID` with your Service ID
 5. Replace `YOUR_TEMPLATE_ID` with your Template ID
 
-### Step 6: Update JavaScript
-In `js/sessions.js`, update the `sendBookingEmail` function:
+### Step 6: Update Code
+1. Open `sessions.html`
+2. Replace `YOUR_PUBLIC_KEY` with your EmailJS Public Key (line 24)
+3. Open `js/sessions.js`
+4. Replace `YOUR_SERVICE_ID` with your Service ID (line 453)
+5. Replace `YOUR_TEMPLATE_ID` with your Template ID (line 453)
 
-```javascript
-emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-  username: user.username,
-  email: user.email,
-  date: formatDate(booking.date),
-  time: formatTime(booking.time),
-  subject: booking.subject,
-  venue: booking.venue,
-  booking_id: booking.id,
-  timestamp: new Date(booking.timestamp).toLocaleString()
-}).then(
-  () => console.log('Email sent successfully'),
-  (error) => console.error('Email error:', error)
-);
-```
+**Note:** The email system is already configured to automatically send emails with:
+- Username and email
+- New booking details
+- **All sessions** the user has booked (grouped by date)
+- Total session count
+
+The email will be sent automatically whenever someone books a session!
 
 ## Option 2: Webhook (Alternative)
 
@@ -103,8 +132,23 @@ If you have a backend server:
 
 After setup:
 1. Book a test session
-2. Check your email inbox
-3. Check browser console for any errors
+2. Check your email inbox at **mohamedhbuule2026@gmail.com**
+3. You should receive an email with:
+   - Username and email of the person who booked
+   - Details of the new booking
+   - **All sessions** that user has booked (so you can see their complete booking history)
+4. Check browser console for any errors
+
+## Viewing All Bookings
+
+You can also view all bookings in the browser console:
+
+1. Open the browser console (F12)
+2. Run these commands:
+   - `getAllBookingsByUsername()` - See all bookings grouped by username
+   - `getBookingsSummary()` - See a formatted summary
+   - `exportBookings()` - Download all bookings as JSON file
+   - `getAllBookings()` - Get raw bookings data
 
 ## Troubleshooting
 

@@ -83,8 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
       bookings.push(booking);
       saveBookings();
 
-      // Send email notification
+      // Send email notification immediately
       sendBookingEmail(booking);
+      
+      console.log('✅ Booking saved and email notification sent');
 
       // Show success modal
       if (successModal) {
@@ -422,82 +424,174 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function sendBookingEmail(booking) {
     const user = auth.getCurrentUser();
+    if (!user) return;
     
-    // Email data
+    // Get all bookings for this user
+    const userBookings = bookings.filter(b => b.userId === user.id);
+    
+    // Format time display for the new booking
     const timeDisplay = booking.startTime && booking.endTime 
       ? `${formatTime(booking.startTime)} - ${formatTime(booking.endTime)} (${booking.duration || calculateDuration(booking.startTime, booking.endTime)})`
       : formatTime(booking.time || booking.startTime);
     
+    // Create email content with all user's sessions
+    let sessionsList = '';
+    if (userBookings.length > 0) {
+      // Group by date
+      const groupedByDate = userBookings.reduce((acc, b) => {
+        if (!acc[b.date]) acc[b.date] = [];
+        acc[b.date].push(b);
+        return acc;
+      }, {});
+      
+      sessionsList = '\n\n📅 ALL SESSIONS FOR THIS USER:\n';
+      sessionsList += '═'.repeat(50) + '\n';
+      
+      Object.keys(groupedByDate).sort().forEach(date => {
+        sessionsList += `\n📆 ${formatDate(date)}\n`;
+        sessionsList += '─'.repeat(50) + '\n';
+        
+        groupedByDate[date].forEach(b => {
+          const bTimeDisplay = b.startTime && b.endTime 
+            ? `${formatTime(b.startTime)} - ${formatTime(b.endTime)} (${b.duration || calculateDuration(b.startTime, b.endTime)})`
+            : formatTime(b.time || b.startTime || 'N/A');
+          
+          sessionsList += `  🕐 Time: ${bTimeDisplay}\n`;
+          sessionsList += `  📚 Subject: ${b.subject}\n`;
+          sessionsList += `  🕌 Venue: ${b.venue}\n`;
+          sessionsList += `  🆔 Booking ID: ${b.id}\n`;
+          if (b === booking) {
+            sessionsList += `  ✨ NEW BOOKING\n`;
+          }
+          sessionsList += '\n';
+        });
+      });
+      
+      sessionsList += `\nTotal Sessions: ${userBookings.length}\n`;
+    }
+    
     const emailData = {
       to_email: 'mohamedhbuule2026@gmail.com',
-      subject: `New Session Booking - ${user.username}`,
+      subject: `🆕 New Session Booking - ${user.username}`,
       message: `
-New Session Booking Received!
+🆕 NEW SESSION BOOKING RECEIVED!
 
-User Details:
-- Username: ${user.username}
-- Email: ${user.email}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Booking Details:
-- Date: ${formatDate(booking.date)}
-- Time: ${timeDisplay}
-- Subject: ${booking.subject}
-- Venue: ${booking.venue}
-- Booking ID: ${booking.id}
-- Booked At: ${new Date(booking.timestamp).toLocaleString()}
+👤 USER INFORMATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Username: ${user.username}
+Email: ${user.email}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 NEW BOOKING DETAILS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 Date: ${formatDate(booking.date)}
+🕐 Time: ${timeDisplay}
+📚 Subject: ${booking.subject}
+🕌 Venue: ${booking.venue}
+🆔 Booking ID: ${booking.id}
+⏰ Booked At: ${new Date(booking.timestamp).toLocaleString()}
+${sessionsList}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is an automated notification from The Juja B Fellas booking system.
       `.trim()
     };
 
     // Try to send via EmailJS (if configured)
     if (typeof emailjs !== 'undefined') {
+      // Format all sessions for EmailJS template
+      let sessionsHtml = '';
+      if (userBookings.length > 0) {
+        const groupedByDate = userBookings.reduce((acc, b) => {
+          if (!acc[b.date]) acc[b.date] = [];
+          acc[b.date].push(b);
+          return acc;
+        }, {});
+        
+        sessionsHtml = '<h3>All Sessions for ' + user.username + ':</h3><ul>';
+        Object.keys(groupedByDate).sort().forEach(date => {
+          sessionsHtml += '<li><strong>' + formatDate(date) + '</strong><ul>';
+          groupedByDate[date].forEach(b => {
+            const bTimeDisplay = b.startTime && b.endTime 
+              ? formatTime(b.startTime) + ' - ' + formatTime(b.endTime) + ' (' + (b.duration || calculateDuration(b.startTime, b.endTime)) + ')'
+              : formatTime(b.time || b.startTime || 'N/A');
+            sessionsHtml += '<li>Time: ' + bTimeDisplay + ' | Subject: ' + b.subject + ' | Venue: ' + b.venue + '</li>';
+          });
+          sessionsHtml += '</ul></li>';
+        });
+        sessionsHtml += '</ul><p>Total Sessions: ' + userBookings.length + '</p>';
+      }
+      
       emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
         username: user.username,
-        email: user.email,
+        user_email: user.email,
         date: formatDate(booking.date),
-        start_time: formatTime(booking.startTime || booking.time),
+        start_time: formatTime(booking.startTime || booking.time || ''),
         end_time: booking.endTime ? formatTime(booking.endTime) : '',
         duration: booking.duration || calculateDuration(booking.startTime || booking.time, booking.endTime),
         subject: booking.subject,
         venue: booking.venue,
         booking_id: booking.id,
         timestamp: new Date(booking.timestamp).toLocaleString(),
-        to_email: emailData.to_email
+        all_sessions: sessionsHtml,
+        total_sessions: userBookings.length.toString(),
+        to_email: emailData.to_email,
+        message: emailData.message
       }).then(
         () => {
-          console.log('Booking email sent successfully to admin');
+          console.log('✅ Booking email sent successfully to admin');
           // Also send confirmation to user
           if (user.email) {
             sendUserConfirmationEmail(booking, user);
           }
         },
-        (error) => console.error('Email error:', error)
+        (error) => {
+          console.error('❌ Email error:', error);
+          // Fallback: Try webhook or log
+          sendEmailFallback(emailData);
+        }
       );
     } else {
-      // Fallback: Use mailto link or log to console
-      console.log('Booking Email Data:', emailData);
-      
-      // Alternative: Use a webhook or API endpoint
-      // You can set up a simple webhook using services like:
-      // - Zapier
-      // - Make.com (formerly Integromat)
-      // - Webhook.site for testing
-      // - Your own backend API
-      
-      // Example webhook call (uncomment and configure):
-      /*
-      fetch('YOUR_WEBHOOK_URL', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData)
-      }).catch(err => console.error('Webhook error:', err));
-      */
+      // Fallback: Try webhook or log
+      sendEmailFallback(emailData);
     }
 
     // Also send confirmation to user
     if (user.email) {
       sendUserConfirmationEmail(booking, user);
+    }
+  }
+
+  function sendEmailFallback(emailData) {
+    // Try webhook first (if configured)
+    const webhookUrl = localStorage.getItem('webhook_url');
+    if (webhookUrl) {
+      fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData)
+      }).then(
+        () => console.log('✅ Email sent via webhook'),
+        (err) => {
+          console.error('❌ Webhook error:', err);
+          console.log('📧 Email Data (for manual sending):', emailData);
+        }
+      );
+    } else {
+      // Log to console for manual sending
+      console.log('📧 Booking Email Data:', emailData);
+      console.log('💡 To enable automatic emails, configure EmailJS or set up a webhook URL');
+      
+      // Create a mailto link as last resort
+      const subject = encodeURIComponent(emailData.subject);
+      const body = encodeURIComponent(emailData.message);
+      const mailtoLink = `mailto:${emailData.to_email}?subject=${subject}&body=${body}`;
+      console.log('📬 Mailto link:', mailtoLink);
     }
   }
 
@@ -545,4 +639,79 @@ The Juja B Fellas Team
       console.log('User Confirmation Email:', userEmailData);
     }
   }
+
+  // Admin functions - available in browser console
+  function getAllBookingsByUsername() {
+    const allBookings = loadBookings();
+    const byUsername = {};
+    
+    allBookings.forEach(booking => {
+      if (!byUsername[booking.username]) {
+        byUsername[booking.username] = {
+          username: booking.username,
+          email: booking.email,
+          sessions: []
+        };
+      }
+      byUsername[booking.username].sessions.push(booking);
+    });
+    
+    return byUsername;
+  }
+
+  function getBookingsSummary() {
+    const byUsername = getAllBookingsByUsername();
+    let summary = '\n📊 BOOKING SUMMARY\n';
+    summary += '═'.repeat(60) + '\n\n';
+    
+    Object.keys(byUsername).forEach(username => {
+      const userData = byUsername[username];
+      summary += `👤 ${username} (${userData.email})\n`;
+      summary += `   Total Sessions: ${userData.sessions.length}\n`;
+      summary += '   ─'.repeat(20) + '\n';
+      
+      // Group by date
+      const byDate = userData.sessions.reduce((acc, s) => {
+        if (!acc[s.date]) acc[s.date] = [];
+        acc[s.date].push(s);
+        return acc;
+      }, {});
+      
+      Object.keys(byDate).sort().forEach(date => {
+        summary += `   📅 ${formatDate(date)}\n`;
+        byDate[date].forEach(s => {
+          const timeDisplay = s.startTime && s.endTime 
+            ? `${formatTime(s.startTime)} - ${formatTime(s.endTime)} (${s.duration || calculateDuration(s.startTime, s.endTime)})`
+            : formatTime(s.time || s.startTime || 'N/A');
+          summary += `      🕐 ${timeDisplay} | 📚 ${s.subject} | 🕌 ${s.venue}\n`;
+        });
+      });
+      summary += '\n';
+    });
+    
+    return summary;
+  }
+
+  function exportBookings() {
+    const dataStr = JSON.stringify(bookings, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'bookings.json';
+    link.click();
+  }
+
+  // Make functions available globally
+  window.exportBookings = exportBookings;
+  window.getAllBookings = () => bookings;
+  window.getAllBookingsByUsername = getAllBookingsByUsername;
+  window.getBookingsSummary = getBookingsSummary;
+
+  // Log summary on page load (for admin)
+  console.log('%c📊 Admin Functions Available:', 'color: #38bdf8; font-weight: bold; font-size: 14px;');
+  console.log('%c- getAllBookingsByUsername() - Get all bookings grouped by username', 'color: #94a3b8;');
+  console.log('%c- getBookingsSummary() - Get formatted summary of all bookings', 'color: #94a3b8;');
+  console.log('%c- exportBookings() - Download all bookings as JSON', 'color: #94a3b8;');
+  console.log('%c- getAllBookings() - Get raw bookings array', 'color: #94a3b8;');
 });
