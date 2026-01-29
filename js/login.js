@@ -37,8 +37,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = auth.login(username, password);
 
       if (result.success) {
-        // Redirect to home
-        window.location.href = 'home.html';
+        // Check if preferences are set
+        const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+        if (preferences[result.user.id]) {
+          // Preferences already set, go to home
+          window.location.href = 'home.html';
+        } else {
+          // Redirect to language selection
+          window.location.href = 'language-selection.html';
+        }
       } else {
         showError(result.message || 'Invalid credentials');
       }

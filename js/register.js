@@ -223,8 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Auto login after registration
         const loginResult = auth.login(username, password);
         if (loginResult.success) {
-          // Redirect to home
-          window.location.href = 'home.html';
+          // Redirect to language selection (new users)
+          window.location.href = 'language-selection.html';
         }
       } else {
         showError(result.message || 'Registration failed');

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Language Selection - AL-MURAJACAH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/branding.css" />
+    <link rel="stylesheet" href="styles/language-selection.css" />
+    <link rel="icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Cairo:wght@300;400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="language-selection-page">
+    <div class="selection-container">
+      <div class="selection-card">
+        <div class="selection-header">
+          <h1 class="site-title-arabic">المراجعة</h1>
+          <h1 class="site-title-english">AL-MURAJACAH</h1>
+          <p class="subtitle">Choose your preferences to continue</p>
+        </div>
+
+        <form id="preferencesForm" class="preferences-form">
+          <!-- Language Selection -->
+          <div class="preference-section">
+            <h2>🌐 Choose Language</h2>
+            <div class="option-grid">
+              <label class="option-card">
+                <input type="radio" name="language" value="en" checked required />
+                <div class="option-content">
+                  <div class="option-icon">🇬🇧</div>
+                  <div class="option-title">English</div>
+                  <div class="option-subtitle">Continue in English</div>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="language" value="ar" required />
+                <div class="option-content">
+                  <div class="option-icon">🇸🇦</div>
+                  <div class="option-title">العربية</div>
+                  <div class="option-subtitle">المتابعة بالعربية</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Study Mode Selection -->
+          <div class="preference-section">
+            <h2>📚 Choose Study Mode</h2>
+            <div class="option-grid">
+              <label class="option-card">
+                <input type="radio" name="studyMode" value="alone" required />
+                <div class="option-content">
+                  <div class="option-icon">👤</div>
+                  <div class="option-title" data-en="Study Alone" data-ar="الدراسة الفردية">Study Alone</div>
+                  <div class="option-subtitle" data-en="Plan your personal revision schedule" data-ar="خطط لجدول مراجعتك الشخصية">Plan your personal revision schedule</div>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="studyMode" value="companion" required />
+                <div class="option-content">
+                  <div class="option-icon">👥</div>
+                  <div class="option-title" data-en="Study with Companion" data-ar="الدراسة مع رفيق">Study with Companion</div>
+                  <div class="option-subtitle" data-en="Study with friends and create groups" data-ar="ادرس مع الأصدقاء وأنشئ مجموعات">Study with friends and create groups</div>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="studyMode" value="group" required />
+                <div class="option-content">
+                  <div class="option-icon">👨‍👩‍👧‍👦</div>
+                  <div class="option-title" data-en="Group Revision" data-ar="المراجعة الجماعية">Group Revision</div>
+                  <div class="option-subtitle" data-en="Join or create revision groups" data-ar="انضم أو أنشئ مجموعات مراجعة">Join or create revision groups</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            <span>Continue</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M7.5 15L12.5 10L7.5 5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/language-selection.js"></script>
+  </body>
+</html>

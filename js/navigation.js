@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutBtn = document.getElementById('logoutBtn');
   const userInfo = document.getElementById('userInfo');
 
+  // Apply language on load
+  const currentLang = localStorage.getItem('currentLanguage') || 'en';
+  if (currentLang === 'ar' && typeof updatePageLanguage === 'function') {
+    updatePageLanguage('ar');
+  }
+
   // Show navigation
   if (navToggle) {
     navToggle.addEventListener('click', () => {

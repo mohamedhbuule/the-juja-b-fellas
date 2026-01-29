@@ -171,7 +171,7 @@
               <!-- Step 2: Time Selection -->
               <div class="form-step" data-step="2">
                 <h2>Select Time</h2>
-                <p>Choose your session start and end time (7:00 AM - 10:00 PM)</p>
+                <p>Choose your session start and end time (24 hours available)</p>
                 <div class="time-selection-container">
                   <div class="time-select-group">
                     <label for="startTime" class="time-label">
@@ -186,7 +186,7 @@
                   <div class="time-select-group">
                     <label for="endTime" class="time-label">
                       <span class="time-label-icon">🕐</span>
-                      End Time
+                      <span data-translate="End Time">End Time</span>
                     </label>
                     <select id="endTime" name="endTime" class="time-select" required>
                       <option value="">Select end time...</option>
@@ -202,7 +202,7 @@
                     ← Back
                   </button>
                   <button type="button" class="btn-primary next-step">
-                    Next: Choose Subject
+                    <span data-translate="Next: Choose Subject">Next: Choose Subject</span>
                   </button>
                 </div>
               </div>
@@ -233,7 +233,7 @@
                     />
                     <div class="subject-card">
                       <div class="subject-icon">⚖️</div>
-                      <div class="subject-name">Jurisprudence</div>
+                      <div class="subject-name" data-translate="Jurisprudence">Jurisprudence</div>
                     </div>
                   </label>
                   <label class="subject-option">
@@ -246,7 +246,7 @@
                     <div class="subject-card">
                       <div class="subject-icon">📜</div>
                       <div class="subject-name">
-                        Principles of Islamic Jurisprudence
+                        <span data-translate="Principles of Islamic Jurisprudence">Principles of Islamic Jurisprudence</span>
                       </div>
                     </div>
                   </label>
@@ -254,12 +254,12 @@
                     <input
                       type="radio"
                       name="sessionSubject"
-                      value="Islamic Creed"
+                      value="Translation of the Quran"
                       required
                     />
                     <div class="subject-card">
-                      <div class="subject-icon">🧠</div>
-                      <div class="subject-name">Islamic Creed</div>
+                      <div class="subject-icon">📿</div>
+                      <div class="subject-name" data-translate="Translation of the Quran">Translation of the Quran</div>
                     </div>
                   </label>
                   <label class="subject-option">
@@ -271,7 +271,7 @@
                     />
                     <div class="subject-card">
                       <div class="subject-icon">📖</div>
-                      <div class="subject-name">Hadith</div>
+                      <div class="subject-name" data-translate="Hadith">Hadith</div>
                     </div>
                   </label>
                 </div>
@@ -279,27 +279,41 @@
                   <button type="button" class="btn-secondary prev-step">
                     ← Back
                   </button>
-                  <button type="button" class="btn-primary next-step">
-                    Next: Choose Venue
+                  <button type="button" class="btn-primary next-step" data-translate="Next: Choose Venue">
+                    <span data-translate="Next: Choose Venue">Next: Choose Venue</span>
                   </button>
                 </div>
               </div>
 
               <!-- Step 4: Venue Selection -->
               <div class="form-step" data-step="4">
-                <h2>Select Venue</h2>
-                <p>Choose your preferred mosque venue</p>
+                <h2 data-translate="Select Venue">Select Venue</h2>
+                <p data-translate="Choose your preferred venue">Choose your preferred venue</p>
                 <div class="venue-grid">
                   <label class="venue-option">
                     <input
                       type="radio"
                       name="sessionVenue"
+                      value="Home"
+                      data-requires-floor="false"
+                      required
+                    />
+                    <div class="venue-card">
+                      <div class="venue-icon">🏠</div>
+                      <div class="venue-name" data-translate="Home">Home</div>
+                    </div>
+                  </label>
+                  <label class="venue-option">
+                    <input
+                      type="radio"
+                      name="sessionVenue"
                       value="Al Basiirah Mosque"
+                      data-requires-floor="false"
                       required
                     />
                     <div class="venue-card">
                       <div class="venue-icon">🕌</div>
-                      <div class="venue-name">Al Basiirah Mosque</div>
+                      <div class="venue-name" data-translate="Al Basiirah Mosque">Al Basiirah Mosque</div>
                     </div>
                   </label>
                   <label class="venue-option">
@@ -307,11 +321,12 @@
                       type="radio"
                       name="sessionVenue"
                       value="Al Hijaaz Mosque"
+                      data-requires-floor="false"
                       required
                     />
                     <div class="venue-card">
                       <div class="venue-icon">🕌</div>
-                      <div class="venue-name">Al Hijaaz Mosque</div>
+                      <div class="venue-name" data-translate="Al Hijaaz Mosque">Al Hijaaz Mosque</div>
                     </div>
                   </label>
                   <label class="venue-option">
@@ -319,11 +334,12 @@
                       type="radio"
                       name="sessionVenue"
                       value="Masjid Abii Bakar"
+                      data-requires-floor="true"
                       required
                     />
                     <div class="venue-card">
                       <div class="venue-icon">🕌</div>
-                      <div class="venue-name">Masjid Abii Bakar</div>
+                      <div class="venue-name" data-translate="Masjid Abii Bakar">Masjid Abii Bakar</div>
                     </div>
                   </label>
                   <label class="venue-option">
@@ -331,20 +347,44 @@
                       type="radio"
                       name="sessionVenue"
                       value="Al Hidaayah Mosque"
+                      data-requires-floor="false"
                       required
                     />
                     <div class="venue-card">
                       <div class="venue-icon">🕌</div>
-                      <div class="venue-name">Al Hidaayah Mosque</div>
+                      <div class="venue-name" data-translate="Al Hidaayah Mosque">Al Hidaayah Mosque</div>
                     </div>
                   </label>
+                </div>
+
+                <!-- Floor Selection (only for Masjid Abii Bakar) -->
+                <div id="floorSelection" class="floor-selection hidden">
+                  <h3 data-translate="Select Floor">Select Floor</h3>
+                  <div class="floor-grid">
+                    <label class="floor-option">
+                      <input type="radio" name="sessionFloor" value="3rd Floor" />
+                      <div class="floor-card">3rd Floor</div>
+                    </label>
+                    <label class="floor-option">
+                      <input type="radio" name="sessionFloor" value="5th Floor" />
+                      <div class="floor-card">5th Floor</div>
+                    </label>
+                    <label class="floor-option">
+                      <input type="radio" name="sessionFloor" value="6th Floor" />
+                      <div class="floor-card">6th Floor</div>
+                    </label>
+                    <label class="floor-option">
+                      <input type="radio" name="sessionFloor" value="Rooftop" />
+                      <div class="floor-card">Rooftop</div>
+                    </label>
+                  </div>
                 </div>
                 <div class="step-actions">
                   <button type="button" class="btn-secondary prev-step">
                     ← Back
                   </button>
-                  <button type="submit" class="btn-primary">
-                    Complete Booking
+                  <button type="submit" class="btn-primary" id="submitButton">
+                    <span id="submitButtonText">Complete Booking</span>
                   </button>
                 </div>
               </div>
@@ -370,6 +410,7 @@
       </div>
     </main>
 
+    <script src="js/translations.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/sessions.js"></script>

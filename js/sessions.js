@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentStep = 1;
   const bookings = loadBookings();
 
+  // Get user study mode and update UI accordingly
+  const user = auth.getCurrentUser();
+  const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+  const userPrefs = preferences[user?.id] || {};
+  const studyMode = userPrefs.studyMode || localStorage.getItem('currentStudyMode') || 'alone';
+  
+  // Update page title and button text based on study mode
+  updatePageForStudyMode(studyMode);
+
   // Initialize time slots
   initializeTimeSlots();
   
@@ -31,6 +40,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Display existing bookings
   displayBookings();
+
+  // Handle venue selection for floor options
+  const venueInputs = document.querySelectorAll('input[name="sessionVenue"]');
+  const floorSelection = document.getElementById('floorSelection');
+  
+  venueInputs.forEach(input => {
+    input.addEventListener('change', () => {
+      const requiresFloor = input.getAttribute('data-requires-floor') === 'true';
+      if (floorSelection) {
+        if (requiresFloor) {
+          floorSelection.classList.remove('hidden');
+          // Make floor selection required
+          const floorInputs = floorSelection.querySelectorAll('input[name="sessionFloor"]');
+          floorInputs.forEach(floorInput => {
+            floorInput.required = true;
+          });
+        } else {
+          floorSelection.classList.add('hidden');
+          // Remove required from floor inputs
+          const floorInputs = floorSelection.querySelectorAll('input[name="sessionFloor"]');
+          floorInputs.forEach(floorInput => {
+            floorInput.required = false;
+            floorInput.checked = false;
+          });
+        }
+      }
+    });
+  });
 
   // Step navigation
   const nextButtons = document.querySelectorAll('.next-step');
@@ -76,31 +113,117 @@ document.addEventListener('DOMContentLoaded', () => {
         duration: duration,
         subject: formData.get('sessionSubject'),
         venue: formData.get('sessionVenue'),
+        floor: formData.get('sessionFloor') || null,
         timestamp: new Date().toISOString()
       };
 
-      // Add booking
-      bookings.push(booking);
-      saveBookings();
+      // Get user study mode
+      const user = auth.getCurrentUser();
+      const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+      const userPrefs = preferences[user?.id] || {};
+      const studyMode = userPrefs.studyMode || localStorage.getItem('currentStudyMode') || 'alone';
+      booking.studyMode = studyMode;
 
-      // IMMEDIATELY send email notification to owner
-      console.log('📧 Sending booking notification to owner...');
-      sendBookingEmail(booking);
-      
-      console.log('✅ Booking saved successfully');
-      console.log('📧 Email notification sent to: mohamedhbuule2026@gmail.com');
-
-      // Show success modal
-      if (successModal) {
-        successModal.classList.remove('hidden');
+      // Handle based on study mode
+      if (studyMode === 'alone') {
+        // Add to personal timetable
+        addToTimetable(booking);
+      } else {
+        // Regular booking flow
+        addBooking(booking);
       }
-
-      // Reset form
-      bookingForm.reset();
-      currentStep = 1;
-      goToStep(1);
-      displayBookings();
     });
+  }
+
+  function addToTimetable(booking) {
+    const timetables = JSON.parse(localStorage.getItem('timetables') || '{}');
+    const userId = auth.getCurrentUser()?.id;
+    
+    if (!timetables[userId]) {
+      timetables[userId] = [];
+    }
+
+    // Check for conflicts
+    const conflicts = checkTimetableConflicts(timetables[userId], booking);
+    
+    // Add to timetable
+    timetables[userId].push(booking);
+    localStorage.setItem('timetables', JSON.stringify(timetables));
+
+    // Show success with conflict warning if any
+    if (successModal) {
+      const modalTitle = successModal.querySelector('h3');
+      const modalText = successModal.querySelector('p');
+      if (modalTitle) modalTitle.textContent = 'Timetable Updated!';
+      if (modalText) {
+        if (conflicts.length > 0) {
+          modalText.innerHTML = `Session added! <br><strong>⚠️ Warning:</strong> ${conflicts.length} conflict(s) detected. Please review your timetable.`;
+          modalText.style.color = 'var(--error)';
+        } else {
+          modalText.textContent = 'Your revision session has been added to your timetable.';
+          modalText.style.color = '';
+        }
+      }
+      successModal.classList.remove('hidden');
+    }
+
+    // Reset form
+    bookingForm.reset();
+    currentStep = 1;
+    goToStep(1);
+    displayBookings();
+  }
+
+  function addBooking(booking) {
+    // Add booking
+    bookings.push(booking);
+    saveBookings();
+
+    // IMMEDIATELY send email notification to owner
+    console.log('📧 Sending booking notification to owner...');
+    sendBookingEmail(booking);
+    
+    console.log('✅ Booking saved successfully');
+    console.log('📧 Email notification sent to: mohamedhbuule2026@gmail.com');
+
+    // Show success modal
+    if (successModal) {
+      successModal.classList.remove('hidden');
+    }
+
+    // Reset form
+    bookingForm.reset();
+    currentStep = 1;
+    goToStep(1);
+    displayBookings();
+  }
+
+  function checkTimetableConflicts(existingSessions, newSession) {
+    const conflicts = [];
+    const newStart = parseTime(newSession.startTime);
+    const newEnd = parseTime(newSession.endTime);
+
+    existingSessions.forEach(session => {
+      if (session.date === newSession.date && session.id !== newSession.id) {
+        const existingStart = parseTime(session.startTime);
+        const existingEnd = parseTime(session.endTime);
+
+        // Check for overlap
+        if ((newStart >= existingStart && newStart < existingEnd) ||
+            (newEnd > existingStart && newEnd <= existingEnd) ||
+            (newStart <= existingStart && newEnd >= existingEnd)) {
+          conflicts.push(session);
+        }
+      }
+    });
+
+    return conflicts;
+  }
+
+  function parseTime(time24) {
+    if (!time24) return 0;
+    const [hours, minutes] = time24.split(':').map(Number);
+    return hours * 60 + minutes;
   }
 
   // Close success modal
@@ -180,6 +303,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Special validation for venue step (floor required for Masjid Abii Bakar)
+    if (step === 4) {
+      const selectedVenue = stepEl.querySelector('input[name="sessionVenue"]:checked');
+      if (selectedVenue && selectedVenue.getAttribute('data-requires-floor') === 'true') {
+        const floorSelected = stepEl.querySelector('input[name="sessionFloor"]:checked');
+        if (!floorSelected) {
+          isValid = false;
+          alert('Please select a floor for Masjid Abii Bakar');
+          return false;
+        }
+      }
+    }
+
     requiredInputs.forEach(input => {
       if (input.type === 'radio') {
         const radioGroup = stepEl.querySelectorAll(`input[name="${input.name}"]`);
@@ -207,14 +343,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function initializeTimeSlots() {
     if (!startTimeSelect || !endTimeSelect) return;
 
-    // Generate time options from 7am to 10pm
+    // Generate time options for 24 hours (00:00 to 23:00)
     const times = [];
-    for (let hour = 7; hour <= 22; hour++) {
+    for (let hour = 0; hour <= 23; hour++) {
       const time24 = `${hour.toString().padStart(2, '0')}:00`;
-      const time12 = hour > 12 
-        ? `${hour - 12}:00 PM` 
-        : hour === 12 
-        ? '12:00 PM' 
+      const time12 = hour === 0
+        ? '12:00 AM'
+        : hour === 12
+        ? '12:00 PM'
+        : hour > 12
+        ? `${hour - 12}:00 PM`
         : `${hour}:00 AM`;
       times.push({ value: time24, display: time12 });
     }
@@ -242,10 +380,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const startHour = parseInt(startTime.split(':')[0]);
-    endTimeSelect.innerHTML = '<option value="">Select end time...</option>';
+    const currentLang = localStorage.getItem('currentLanguage') || 'en';
+    const endPlaceholder = currentLang === 'ar' ? 'اختر وقت النهاية...' : 'Select end time...';
+    endTimeSelect.innerHTML = `<option value="">${endPlaceholder}</option>`;
 
-    // Only show times after start time
-    for (let hour = startHour + 1; hour <= 22; hour++) {
+    // Only show times after start time (up to 23:59)
+    for (let hour = startHour + 1; hour <= 23; hour++) {
       const time24 = `${hour.toString().padStart(2, '0')}:00`;
       const time12 = hour > 12 
         ? `${hour - 12}:00 PM` 
@@ -281,6 +421,62 @@ document.addEventListener('DOMContentLoaded', () => {
       return `${hours}hr`;
     } else {
       return `${minutes}min`;
+    }
+  }
+
+  function updatePageForStudyMode(mode) {
+    const pageTitle = document.querySelector('.page-title');
+    const submitButton = document.getElementById('submitButtonText');
+    const navLink = document.querySelector('a[href="sessions.html"]');
+    
+    if (mode === 'alone') {
+      if (pageTitle) {
+        pageTitle.textContent = 'Plan Your Revision';
+      }
+      if (submitButton) {
+        submitButton.textContent = 'Make a Timetable';
+      }
+      if (navLink) {
+        navLink.textContent = '📅 Plan Revision';
+      }
+    } else {
+      if (pageTitle) {
+        pageTitle.textContent = 'Book Your Revision Session';
+      }
+      if (submitButton) {
+        submitButton.textContent = 'Complete Booking';
+      }
+      if (navLink) {
+        navLink.textContent = '📅 Book Session';
+      }
+    }
+  }
+
+  function updatePageForStudyMode(mode) {
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const submitButton = document.getElementById('submitButtonText');
+    
+    if (mode === 'alone') {
+      if (pageTitle) {
+        pageTitle.textContent = 'Plan Your Revision';
+      }
+      if (pageSubtitle) {
+        pageSubtitle.textContent = 'Create your personal revision timetable. You can add multiple sessions and manage them all in one place.';
+      }
+      if (submitButton) {
+        submitButton.textContent = 'Make a Timetable';
+      }
+    } else {
+      if (pageTitle) {
+        pageTitle.textContent = 'Book Your Revision Session';
+      }
+      if (pageSubtitle) {
+        pageSubtitle.textContent = 'You can book multiple sessions per day. Each session can have different subject and venue.';
+      }
+      if (submitButton) {
+        submitButton.textContent = 'Complete Booking';
+      }
     }
   }
 
@@ -358,7 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const venueEl = document.createElement('div');
         venueEl.className = 'booking-info';
-        venueEl.textContent = `🕌 ${booking.venue}`;
+        const venueText = booking.venue === 'Home' ? '🏠' : '🕌';
+        venueEl.textContent = `${venueText} ${booking.venue}${booking.floor ? ` - ${booking.floor}` : ''}`;
 
         details.appendChild(dateEl);
         details.appendChild(timeEl);

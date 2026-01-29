@@ -1,0 +1,141 @@
+/* Language Selection Page */
+.language-selection-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: var(--bg-dark);
+}
+
+.selection-container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.selection-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass);
+  border-radius: 24px;
+  padding: 48px 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(56, 189, 248, 0.1);
+  animation: slideUp 0.6s ease;
+}
+
+.selection-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.selection-header .subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: 16px;
+}
+
+.preferences-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.preference-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: var(--primary);
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.option-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.option-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.option-content {
+  background: var(--bg-darker);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-card input:checked + .option-content {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.1));
+  border-color: var(--primary);
+  box-shadow: 0 8px 30px rgba(56, 189, 248, 0.3);
+  transform: scale(1.05) translateY(-4px);
+}
+
+.option-content:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.option-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.option-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  font-family: 'Cairo', sans-serif;
+}
+
+.option-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .selection-card {
+    padding: 32px 24px;
+  }
+
+  .option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preference-section h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selection-card {
+    padding: 24px 16px;
+  }
+
+  .option-content {
+    padding: 20px;
+  }
+
+  .option-icon {
+    font-size: 40px;
+  }
+}

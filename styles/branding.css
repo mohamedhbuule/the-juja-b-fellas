@@ -1,0 +1,76 @@
+/* AL-MURAJACAH Branding Styles */
+.site-title-arabic {
+  font-family: 'Cairo', 'Amiri', 'Noto Naskh Arabic', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #60a5fa, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  line-height: 1.2;
+  text-align: center;
+  letter-spacing: 2px;
+  animation: gradientShift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+.site-title-english {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 8px;
+  letter-spacing: 4px;
+  text-align: center;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.nav-logo .logo-text {
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+}
+
+/* Arabic text styling */
+[dir="rtl"],
+.arabic-text {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Cairo', 'Noto Naskh Arabic', 'Amiri', sans-serif;
+}
+
+.arabic-text h1,
+.arabic-text h2,
+.arabic-text h3 {
+  font-family: 'Cairo', 'Amiri', serif;
+}
+
+@media (max-width: 768px) {
+  .site-title-arabic {
+    font-size: 2.5rem;
+  }
+
+  .site-title-english {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title-arabic {
+    font-size: 2rem;
+  }
+
+  .site-title-english {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+}

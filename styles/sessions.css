@@ -553,6 +553,73 @@
   font-size: 1.1rem;
 }
 
+/* Floor Selection */
+.floor-selection {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid var(--glass);
+  animation: slideDown 0.3s ease;
+}
+
+.floor-selection.hidden {
+  display: none;
+}
+
+.floor-selection h3 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: var(--primary);
+  font-family: 'Playfair Display', serif;
+}
+
+.floor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.floor-option {
+  cursor: pointer;
+}
+
+.floor-option input {
+  display: none;
+}
+
+.floor-card {
+  background: var(--bg-darker);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.floor-option input:checked + .floor-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.1));
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+  transform: scale(1.05);
+}
+
+.floor-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .step-actions {
   display: flex;
   gap: 16px;
