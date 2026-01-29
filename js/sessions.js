@@ -451,34 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updatePageForStudyMode(mode) {
-    const pageTitle = document.querySelector('.page-title');
-    const submitButton = document.getElementById('submitButtonText');
-    const navLink = document.querySelector('a[href="sessions.html"]');
-    
-    if (mode === 'alone') {
-      if (pageTitle) {
-        pageTitle.textContent = 'Plan Your Revision';
-      }
-      if (submitButton) {
-        submitButton.textContent = 'Make a Timetable';
-      }
-      if (navLink) {
-        navLink.textContent = '📅 Plan Revision';
-      }
-    } else {
-      if (pageTitle) {
-        pageTitle.textContent = 'Book Your Revision Session';
-      }
-      if (submitButton) {
-        submitButton.textContent = 'Complete Booking';
-      }
-      if (navLink) {
-        navLink.textContent = '📅 Book Session';
-      }
-    }
-  }
-
-  function updatePageForStudyMode(mode) {
     const pageTitle = document.getElementById('pageTitle');
     const pageSubtitle = document.getElementById('pageSubtitle');
     const submitButton = document.getElementById('submitButtonText');
