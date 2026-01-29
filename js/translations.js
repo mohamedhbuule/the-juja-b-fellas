@@ -148,25 +148,75 @@ function t(key, lang = null) {
 
 // Update page content based on language
 function updatePageLanguage(lang) {
+  // Set document direction and language
+  if (lang === 'ar') {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', 'ar');
+    document.body.classList.add('arabic-text');
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.documentElement.setAttribute('lang', 'en');
+    document.body.classList.remove('arabic-text');
+  }
+
+  // Update all elements with data-translate attribute
   const elements = document.querySelectorAll('[data-translate]');
   elements.forEach(el => {
     const key = el.getAttribute('data-translate');
-    el.textContent = t(key, lang);
+    const translation = t(key, lang);
+    if (translation && translation !== key) {
+      el.textContent = translation;
+    }
   });
 
   // Update placeholders
   const inputs = document.querySelectorAll('[data-placeholder-translate]');
   inputs.forEach(input => {
     const key = input.getAttribute('data-placeholder-translate');
-    input.placeholder = t(key, lang);
-  });
-
-  // Update navigation
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => {
-    const text = link.textContent.trim();
-    if (translations.ar[text]) {
-      link.textContent = lang === 'ar' ? translations.ar[text] : text;
+    const translation = t(key, lang);
+    if (translation && translation !== key) {
+      input.placeholder = translation;
     }
   });
+
+  // Update navigation links (handle emoji + text)
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    const span = link.querySelector('span[data-translate]');
+    if (span) {
+      const key = span.getAttribute('data-translate');
+      const translation = t(key, lang);
+      if (translation && translation !== key) {
+        span.textContent = translation;
+      }
+    } else {
+      // Fallback: try to translate the whole text
+      const text = link.textContent.trim();
+      const emoji = text.match(/^[\u{1F300}-\u{1F9FF}]/u)?.[0] || '';
+      const textWithoutEmoji = text.replace(/^[\u{1F300}-\u{1F9FF}]\s*/, '').trim();
+      if (translations.ar[textWithoutEmoji]) {
+        link.textContent = lang === 'ar' ? emoji + ' ' + translations.ar[textWithoutEmoji] : text;
+      }
+    }
+  });
+
+  // Update page title
+  const pageTitle = document.querySelector('title');
+  if (pageTitle) {
+    const currentTitle = pageTitle.textContent;
+    if (lang === 'ar') {
+      // Translate common title patterns
+      if (currentTitle.includes('Home')) {
+        pageTitle.textContent = currentTitle.replace('Home', 'الرئيسية');
+      } else if (currentTitle.includes('About')) {
+        pageTitle.textContent = currentTitle.replace('About', 'من نحن');
+      } else if (currentTitle.includes('Book Session') || currentTitle.includes('Plan Revision')) {
+        pageTitle.textContent = currentTitle.replace(/Book Session|Plan Revision/, 'خطط للمراجعة');
+      } else if (currentTitle.includes('Timetable')) {
+        pageTitle.textContent = currentTitle.replace('Timetable', 'جدولي');
+      } else if (currentTitle.includes('Profile')) {
+        pageTitle.textContent = currentTitle.replace('Profile', 'الملف الشخصي');
+      }
+    }
+  }
 }

@@ -175,19 +175,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addBooking(booking) {
-    // Add booking
+    // For companion/group modes, add to bookings list
     bookings.push(booking);
     saveBookings();
 
-    // IMMEDIATELY send email notification to owner
-    console.log('📧 Sending booking notification to owner...');
-    sendBookingEmail(booking);
-    
-    console.log('✅ Booking saved successfully');
-    console.log('📧 Email notification sent to: mohamedhbuule2026@gmail.com');
+    // Only send email for companion/group modes (not for alone mode)
+    // Alone mode goes to timetable only (handled in addToTimetable)
+    if (booking.studyMode === 'companion' || booking.studyMode === 'group') {
+      console.log('📧 Sending booking notification to owner...');
+      sendBookingEmail(booking);
+      console.log('✅ Booking saved successfully');
+      console.log('📧 Email notification sent to: mohamedhbuule2026@gmail.com');
+    } else {
+      console.log('✅ Booking saved successfully (timetable mode - no email sent)');
+    }
 
     // Show success modal
     if (successModal) {
+      const modalTitle = successModal.querySelector('h3');
+      const modalText = successModal.querySelector('p');
+      if (modalTitle) {
+        const currentLang = localStorage.getItem('currentLanguage') || 'en';
+        if (booking.studyMode === 'alone') {
+          modalTitle.textContent = currentLang === 'ar' ? 'تم تحديث الجدول!' : 'Timetable Updated!';
+        } else {
+          modalTitle.textContent = currentLang === 'ar' ? 'تم حجز الجلسة بنجاح!' : 'Session Booked Successfully!';
+        }
+      }
+      if (modalText) {
+        const currentLang = localStorage.getItem('currentLanguage') || 'en';
+        if (booking.studyMode === 'alone') {
+          modalText.textContent = currentLang === 'ar' 
+            ? 'تمت إضافة جلسة المراجعة إلى جدولك.' 
+            : 'Your revision session has been added to your timetable.';
+        } else {
+          modalText.textContent = currentLang === 'ar'
+            ? 'تم تأكيد حجزك وإرساله إلى بريدك الإلكتروني.'
+            : 'Your booking has been confirmed and sent to your email.';
+        }
+      }
       successModal.classList.remove('hidden');
     }
 

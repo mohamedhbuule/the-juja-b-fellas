@@ -23,10 +23,7 @@ class Auth {
       return { success: false, message: 'Username already exists' };
     }
 
-    // Check if email already exists
-    if (this.users.find(u => u.email === email)) {
-      return { success: false, message: 'Email already registered' };
-    }
+    // Email can be shared by multiple users (removed email uniqueness check)
 
     // Create user object
     const user = {
